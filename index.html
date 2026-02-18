@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ma Crinière — Boutique capillaire</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">Ma Crinière.</a>
+      <nav class="nav">
+        <a href="index.html">ACCUEIL</a>
+        <a href="a-propos.html">À PROPOS</a>
+        <a href="produits.html">PRODUITS</a>
+        <a href="commande.html">COMMANDER</a>
+      </nav>
+      <a href="index.html#contact" class="btn btn-contact">CONTACT</a>
+    </div>
+  </header>
+
+  <!-- Hero page d'accueil uniquement : photo pleine largeur, texte et CTA par-dessus -->
+  <section class="hero hero--home" id="accueil">
+    <div class="hero--home-bg" role="img" aria-label="Soins capillaires Ma Crinière"></div>
+    <div class="hero--home-overlay"></div>
+    <div class="container hero--home-content">
+      <h1 class="hero-headline">
+        <span class="hero-headline--serif">Sublimez</span>
+        <span class="hero-headline--bold">vos cheveux</span>
+      </h1>
+      <p class="hero-text">Des soins capillaires premium spécialement conçus pour nourrir, hydrater et sublimer votre chevelure. Du shampooing doux aux masques réparateurs, tout pour une crinière en pleine santé.</p>
+      <a href="produits.html" class="btn btn-hero-maskin">Découvrez nos produits</a>
+      <div class="hero-float-box hero-float-box--home">
+        <span class="hero-float-value">100%</span>
+        <span class="hero-float-check">✓</span>
+        <p class="hero-float-label">Naturel</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Découvrez nos Incontournables (référence Maskin) -->
+  <section class="products" id="produits">
+    <div class="container">
+      <div class="products-header">
+        <div>
+          <h2 class="section-title-maskin">Découvrez nos <span class="section-title-maskin--script">Incontournables</span></h2>
+        </div>
+        <a href="produits.html" class="btn btn-violet">VOIR TOUT</a>
+      </div>
+      <div class="products-grid products-grid--elegant">
+        <article class="product-card product-card--elegant">
+          <div class="product-image" style="background: url('Images Sites Macrinère/Produit 1.jpg') center/cover;"></div>
+          <div class="product-info">
+            <h3 class="product-name">Masque Hydratant Argan</h3>
+            <p class="product-tag">INTENSE</p>
+            <p class="product-price">225 $</p>
+          </div>
+        </article>
+        <article class="product-card product-card--elegant">
+          <div class="product-image" style="background: url('Images Sites Macrinère/Produit 2.jpg') center/cover;"></div>
+          <div class="product-info">
+            <h3 class="product-name">Shampooing Charbons</h3>
+            <p class="product-tag">PURIFIANT</p>
+            <p class="product-price">185 $</p>
+          </div>
+        </article>
+        <article class="product-card product-card--elegant">
+          <div class="product-image" style="background: url('Images Sites Macrinère/Produit 3.jpg') center/cover;"></div>
+          <div class="product-info">
+            <h3 class="product-name">Gloss Lavande</h3>
+            <p class="product-tag">BRILLANCE</p>
+            <p class="product-price">145 $</p>
+          </div>
+        </article>
+        <article class="product-card product-card--elegant">
+          <div class="product-image" style="background: url('Images Sites Macrinère/Produit 4.jpg') center/cover;"></div>
+          <div class="product-info">
+            <h3 class="product-name">Soins Solaires</h3>
+            <p class="product-tag">PROTECTION</p>
+            <p class="product-price">255 $</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pourquoi Choisir Ma Crinière : 2 colonnes (image + 2x2 cartes avantages) -->
+  <section class="why-choose">
+    <div class="container why-choose-inner">
+      <div class="why-choose-image" role="img" aria-label="Soins Ma Crinière"></div>
+      <div class="why-choose-content">
+        <h2 class="section-title-maskin">Pourquoi Choisir <span class="section-title-maskin--script">Ma Crinière</span></h2>
+        <div class="why-choose-grid">
+          <div class="why-choose-card">
+            <h3>100% Naturel</h3>
+            <p>Des formules à base d'ingrédients naturels pour prendre soin de vos cheveux en douceur.</p>
+          </div>
+          <div class="why-choose-card">
+            <h3>Spécialement Formulé</h3>
+            <p>Des soins conçus pour les cheveux afro, métis et bouclés.</p>
+          </div>
+          <div class="why-choose-card">
+            <h3>Livraison Express</h3>
+            <p>Recevez vos produits en 24h ou 48h dans un rayon de 70 km.</p>
+          </div>
+          <div class="why-choose-card">
+            <h3>Conseils Experts</h3>
+            <p>Notre équipe vous accompagne pour trouver les produits adaptés.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Une passion pour la beauté capillaire (bannière pleine largeur) -->
+  <section class="passion-banner">
+    <div class="passion-banner-overlay"></div>
+    <div class="container passion-banner-content">
+      <h2 class="passion-banner-title">Une passion pour la <span class="passion-banner-title--script">Beauté Capillaire</span></h2>
+      <p class="passion-banner-desc">Chez Ma Crinière, nous croyons que chaque crinière mérite des soins d'exception. Notre mission : vous accompagner avec des produits naturels et efficaces pour sublimer vos cheveux au quotidien.</p>
+    </div>
+  </section>
+
+  <!-- Des soins sur mesure pour sublimer votre beauté naturelle -->
+  <section class="soins-sur-mesure">
+    <div class="container soins-sur-mesure-inner">
+      <div class="soins-sur-mesure-text">
+        <h2 class="section-title-maskin">Des Soins Sur Mesure pour</h2>
+        <p class="section-title-maskin--script soins-subtitle">Sublimer Votre Beauté Naturelle</p>
+        <p class="soins-desc">Découvrez nos collections pensées pour toute la famille : soins femme, homme et douceur enfants. Des produits adaptés à chaque type de cheveux.</p>
+      </div>
+      <div class="soins-categories-wrap">
+        <div class="soins-categories-grid">
+          <a href="produits.html" class="soins-category-card">
+            <div class="soins-category-icon" style="background: url('Images Sites Macrinère/soins femmes.jpg') center/cover;"></div>
+            <span>Soins Femme</span>
+          </a>
+          <a href="produits.html" class="soins-category-card">
+            <div class="soins-category-icon" style="background: url('Images Sites Macrinère/Homme.jpeg') center/cover;"></div>
+            <span>Soins Homme</span>
+          </a>
+          <a href="produits.html" class="soins-category-card">
+            <div class="soins-category-icon" style="background: url('Images Sites Macrinère/Enfants.jpg') center/cover;"></div>
+            <span>Douceur Enfants</span>
+          </a>
+          <a href="produits.html" class="soins-category-card">
+            <div class="soins-category-icon" style="background: url('Images Sites Macrinère/Accessoires.jpg') center/cover;"></div>
+            <span>Accessoires</span>
+          </a>
+        </div>
+        <a href="produits.html" class="btn btn-violet btn-soins-cta">Consulter la Boutique</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ce que disent nos clients (témoignages) -->
+  <section class="testimonials">
+    <div class="container">
+      <h2 class="section-title-maskin">Ce que disent <span class="section-title-maskin--script">nos clients</span></h2>
+      <p class="testimonials-subtitle">Des Témoignages Authentiques</p>
+      <div class="testimonials-stars">★★★★★</div>
+      <blockquote class="testimonial-quote">
+        <span class="testimonial-quote-icon">"</span>
+        <p>Des produits qui ont transformé ma routine capillaire. Ma crinière n'a jamais été aussi belle et en bonne santé. Je recommande à 100 % !</p>
+        <cite class="testimonial-author">— Marie K.</cite>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="newsletter">
+    <div class="container">
+      <p class="section-subtitle light">RESTER INFORMÉ</p>
+      <h2 class="section-title light">Rejoignez notre communauté</h2>
+      <p class="newsletter-desc">Recevez nos conseils, news, exclusivités et offres et promotions directement dans votre boîte mail.</p>
+      <form class="newsletter-form" action="#" method="post">
+        <input type="email" placeholder="Votre adresse email..." required>
+        <button type="submit" class="btn btn-yellow">S'ABONNER</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Procédure (avant-dernière section) -->
+  <section class="procedure">
+    <div class="container">
+      <p class="section-subtitle">SIMPLE, RAPIDE & EFFICACE</p>
+      <h2 class="section-title">Procédure de Commande & Livraison</h2>
+      <p class="section-desc">Commandez en quelques clics nos produits à votre taille exacte.</p>
+      <div class="procedure-cards">
+        <div class="procedure-card">
+          <span class="procedure-num">01</span>
+          <div class="procedure-icon">🛍️</div>
+          <h3>Choisissez vos produits</h3>
+          <p>Parcourez notre catalogue et ajoutez vos articles préférés au panier.</p>
+        </div>
+        <div class="procedure-card">
+          <span class="procedure-num">02</span>
+          <div class="procedure-icon">📋</div>
+          <h3>Passez votre commande</h3>
+          <p>Confirmez les informations de livraison et de facturation. Payez en sécurité.</p>
+        </div>
+        <div class="procedure-card">
+          <span class="procedure-num">03</span>
+          <div class="procedure-icon">🛒</div>
+          <h3>Payez en toute sécurité</h3>
+          <p>Méthode 100% sécurisée, nous proposons un paiement fiable.</p>
+        </div>
+        <div class="procedure-card">
+          <span class="procedure-num">04</span>
+          <div class="procedure-icon">🚀</div>
+          <h3>Recevez chez vous!</h3>
+          <p>Livraison express 24h/48h dans un rayon de 70KM ou 48-72h.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" id="contact">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <strong class="footer-logo">Ma Crinière.</strong>
+        <p>Votre boutique spécialisée de créations & d'idées. Des extraits précieux pour sublimer votre projet de rêve.</p>
+        <p class="footer-copy">© 2024 Ma Crinière. Tous droits réservés. Boutique e-commerce propulsée par Ma Crinière.</p>
+      </div>
+      <div class="footer-col">
+        <h4>NAVIGATION</h4>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="produits.html">Produits</a></li>
+          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>INFORMATIONS</h4>
+        <ul>
+          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="#">Livraison</a></li>
+          <li><a href="#">Retours</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>CONTACT</h4>
+        <p class="footer-contact">📍 ADRESSE<br>21 Avenue D.A.P.L.<br>Germano de Giramio</p>
+        <p class="footer-contact">📞 CONTACTER<br>+33 2 87 84 71 280</p>
+        <p class="footer-contact">📷 RÉSEAUX SOCIAUX<br>@ma_criniere</p>
+      </div>
+    </div>
+    <div class="footer-pagination">
+      <button aria-label="Page précédente">&lt;</button>
+      <span>1</span>
+      <button aria-label="Page suivante">&gt;</button>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
