@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commander — Ma Crinière</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">Ma Crinière.</a>
+      <nav class="nav">
+        <a href="index.html">ACCUEIL</a>
+        <a href="a-propos.html">À PROPOS</a>
+        <a href="produits.html">PRODUITS</a>
+        <a href="commande.html" class="nav-active">COMMANDER</a>
+      </nav>
+      <a href="index.html#contact" class="btn btn-contact">CONTACT</a>
+    </div>
+  </header>
+
+  <main class="page-main">
+    <section class="hero hero--page hero--page-commander" id="hero">
+      <div class="hero--page-bg" role="img" aria-label="Commander"></div>
+      <div class="hero--page-overlay"></div>
+      <div class="container hero--page-inner">
+        <h1 class="hero-headline">
+          <span class="hero-headline--serif">Passez</span>
+          <span class="hero-headline--bold">votre commande</span>
+        </h1>
+        <p class="hero-text">Remplissez le formulaire ci-dessous. Nous vous recontacterons par WhatsApp pour confirmer votre commande et organiser la livraison.</p>
+        <a href="#form-commande" class="btn btn-hero-maskin">Remplir le formulaire</a>
+      </div>
+    </section>
+
+    <section class="commande-form-section" id="form-commande">
+      <div class="container container--form">
+        <form class="form-commande" id="form-commande" action="#" method="post">
+          <div class="form-row form-row--double">
+            <div class="form-group">
+              <label for="prenom">Prénom <span class="required">*</span></label>
+              <input type="text" id="prenom" name="prenom" required placeholder="Votre prénom">
+            </div>
+            <div class="form-group">
+              <label for="nom">Nom <span class="required">*</span></label>
+              <input type="text" id="nom" name="nom" required placeholder="Votre nom">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="mail">Adresse email <span class="required">*</span></label>
+              <input type="email" id="mail" name="mail" required placeholder="exemple@email.com">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="tel">Téléphone WhatsApp <span class="required">*</span></label>
+              <input type="tel" id="tel" name="tel" required placeholder="+243 XXX XXX XXX">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Produits <span class="required">*</span></label>
+              <p class="form-hint">Sélectionnez un ou plusieurs produits</p>
+              <div class="form-products">
+                <label class="form-checkbox">
+                  <input type="checkbox" name="produits[]" value="Masque Hydratant Argan - 225 $">
+                  <span>Masque Hydratant Argan — 225 $</span>
+                </label>
+                <label class="form-checkbox">
+                  <input type="checkbox" name="produits[]" value="Shampooing Charbons - 185 $">
+                  <span>Shampooing Charbons — 185 $</span>
+                </label>
+                <label class="form-checkbox">
+                  <input type="checkbox" name="produits[]" value="Gloss Lavande - 145 $">
+                  <span>Gloss Lavande — 145 $</span>
+                </label>
+                <label class="form-checkbox">
+                  <input type="checkbox" name="produits[]" value="Soins Solaires - 255 $">
+                  <span>Soins Solaires — 255 $</span>
+                </label>
+                <label class="form-checkbox">
+                  <input type="checkbox" name="produits[]" value="Huile Capillaire Cocotte - 195 $">
+                  <span>Huile Capillaire Cocotte — 195 $</span>
+                </label>
+                <label class="form-checkbox">
+                  <input type="checkbox" name="produits[]" value="Coiffant Éclat Karité - 165 $">
+                  <span>Coiffant Éclat Karité — 165 $</span>
+                </label>
+                <label class="form-checkbox">
+                  <input type="checkbox" name="produits[]" value="Sérum Réparateur - 210 $">
+                  <span>Sérum Réparateur — 210 $</span>
+                </label>
+                <label class="form-checkbox">
+                  <input type="checkbox" name="produits[]" value="Baume Hydratant - 175 $">
+                  <span>Baume Hydratant — 175 $</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="livraison">Lieu de livraison <span class="required">*</span></label>
+              <textarea id="livraison" name="livraison" rows="4" required placeholder="Adresse complète, commune, ville (ex : Kinshasa, Gombe, avenue...)"></textarea>
+            </div>
+          </div>
+
+          <div class="form-row form-row--submit">
+            <button type="submit" class="btn btn-hero-primary btn-submit">Valider la commande</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="contact">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <strong class="footer-logo">Ma Crinière.</strong>
+        <p>Votre boutique spécialisée de créations & d'idées. Des extraits précieux pour sublimer votre projet de rêve.</p>
+        <p class="footer-copy">© 2024 Ma Crinière. Tous droits réservés.</p>
+      </div>
+      <div class="footer-col">
+        <h4>NAVIGATION</h4>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="produits.html">Produits</a></li>
+          <li><a href="commande.html">Commander</a></li>
+          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>INFORMATIONS</h4>
+        <ul>
+          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="#">Livraison</a></li>
+          <li><a href="#">Retours</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>CONTACT</h4>
+        <p class="footer-contact">📍 21 Avenue D.A.P.L.<br>Germano de Giramio</p>
+        <p class="footer-contact">📞 +33 2 87 84 71 280</p>
+        <p class="footer-contact">📷 @ma_criniere</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    document.getElementById('form-commande').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var produits = document.querySelectorAll('input[name="produits[]"]:checked');
+      if (produits.length === 0) {
+        alert('Veuillez sélectionner au moins un produit.');
+        return;
+      }
+      alert('Merci ! Votre commande a bien été enregistrée. Nous vous recontacterons très bientôt sur WhatsApp.');
+      this.reset();
+    });
+  </script>
+</body>
+</html>
