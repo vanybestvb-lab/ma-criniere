@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panier — Ma Crinière</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><img src="Images Sites Macrinère/Logo Ma Crinière Violet.png" alt="Ma Crinière" class="logo-img"></a>
+      <nav class="nav">
+        <a href="index.html">ACCUEIL</a>
+        <a href="a-propos.html">À PROPOS</a>
+        <a href="produits.html">PRODUITS</a>
+      </nav>
+      <a href="panier.html" class="header-cart-icon" aria-label="Panier">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+        <span class="cart-badge" data-cart-badge hidden>0</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="page-main">
+    <section class="products products-page" style="padding-top: 2rem;">
+      <div class="container" data-cart-root>
+        <div class="cart-header">
+          <h1 class="section-title-maskin">Votre <span class="section-title-maskin--script">panier</span></h1>
+          <a href="produits.html" class="btn btn-violet">Continuer mes achats</a>
+        </div>
+        <div data-cart-empty class="cart-empty" hidden>
+          <p>Votre panier est vide.</p>
+          <a href="produits.html" class="btn btn-violet">Découvrir nos produits</a>
+        </div>
+        <div class="cart-table-wrap" data-cart-table-wrap>
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th>Produit</th>
+                <th>Désignation</th>
+                <th>Prix unitaire</th>
+                <th>Quantité</th>
+                <th>Sous-total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody data-cart-table-body></tbody>
+          </table>
+          <div class="cart-summary">
+            <div class="cart-summary-row">
+              <span>Total</span>
+              <span data-cart-total>0 $</span>
+            </div>
+            <a href="checkout.html" class="btn btn-violet" style="width: 100%; justify-content: center; margin-top: 1rem;">Commander</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="contact">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <img src="Images Sites Macrinère/Logo Ma Crinière.png" alt="Ma Crinière" class="footer-logo-img">
+        <p>Votre boutique spécialisée de créations & d'idées.</p>
+        <p class="footer-copy">© 2024 Ma Crinière. Tous droits réservés.</p>
+      </div>
+      <div class="footer-col">
+        <h4>NAVIGATION</h4>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="produits.html">Produits</a></li>
+          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>INFORMATIONS</h4>
+        <ul>
+          <li><a href="#">Livraison</a></li>
+          <li><a href="#">Retours</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>CONTACT</h4>
+        <p class="footer-contact">📍 21 Avenue D.A.P.L.<br>Germano de Giramio</p>
+        <p class="footer-contact">📞 +33 2 87 84 71 280</p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/panier.js"></script>
+</body>
+</html>
