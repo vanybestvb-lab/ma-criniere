@@ -12,13 +12,16 @@
 <body>
   <header class="header">
     <div class="container header-inner">
-      <a href="index.html" class="logo">Ma Crinière.</a>
+      <a href="index.html" class="logo"><img src="Images Sites Macrinère/Logo Ma Crinière Violet.png" alt="Ma Crinière" class="logo-img"></a>
       <nav class="nav">
         <a href="index.html">ACCUEIL</a>
         <a href="a-propos.html">À PROPOS</a>
         <a href="produits.html" class="nav-active">PRODUITS</a>
-        <a href="commande.html">COMMANDER</a>
       </nav>
+      <a href="panier.html" class="header-cart-icon" aria-label="Panier">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+        <span class="cart-badge" data-cart-badge hidden>0</span>
+      </a>
       <a href="index.html#contact" class="btn btn-contact">CONTACT</a>
     </div>
   </header>
@@ -40,68 +43,92 @@
     <section class="products products-page" id="produits-grid">
       <div class="container">
         <div class="products-grid products-grid--elegant products-grid--large">
-          <article class="product-card product-card--elegant">
-            <div class="product-image" style="background: url('Images Sites Macrinère/Produit 1.jpg') center/cover;"></div>
+          <article class="product-card product-card--elegant" data-product-slug="masque-hydratant-argan">
+            <a href="product.html?slug=masque-hydratant-argan" class="product-image" style="background: url('Images Sites Macrinère/Produit 1.jpg') center/cover;"></a>
             <div class="product-info">
-              <h3 class="product-name">Masque Hydratant Argan</h3>
+              <h3 class="product-name"><a href="product.html?slug=masque-hydratant-argan">Masque Hydratant Argan</a></h3>
               <p class="product-tag">INTENSE</p>
-              <p class="product-price">225 $</p>
+              <div class="product-footer">
+                <p class="product-price">225 $</p>
+                <button type="button" class="btn btn-violet product-add-to-cart">Ajouter au panier</button>
+              </div>
             </div>
           </article>
-          <article class="product-card product-card--elegant">
-            <div class="product-image" style="background: url('Images Sites Macrinère/Produit 2.jpg') center/cover;"></div>
+          <article class="product-card product-card--elegant" data-product-slug="shampooing-charbons">
+            <a href="product.html?slug=shampooing-charbons" class="product-image" style="background: url('Images Sites Macrinère/Produit 2.jpg') center/cover;"></a>
             <div class="product-info">
-              <h3 class="product-name">Shampooing Charbons</h3>
+              <h3 class="product-name"><a href="product.html?slug=shampooing-charbons">Shampooing Charbons</a></h3>
               <p class="product-tag">PURIFIANT</p>
-              <p class="product-price">185 $</p>
+              <div class="product-footer">
+                <p class="product-price">185 $</p>
+                <button type="button" class="btn btn-violet product-add-to-cart">Ajouter au panier</button>
+              </div>
             </div>
           </article>
-          <article class="product-card product-card--elegant">
-            <div class="product-image" style="background: url('Images Sites Macrinère/Produit 3.jpg') center/cover;"></div>
+          <article class="product-card product-card--elegant" data-product-slug="gloss-lavande">
+            <a href="product.html?slug=gloss-lavande" class="product-image" style="background: url('Images Sites Macrinère/Produit 3.jpg') center/cover;"></a>
             <div class="product-info">
-              <h3 class="product-name">Gloss Lavande</h3>
+              <h3 class="product-name"><a href="product.html?slug=gloss-lavande">Gloss Lavande</a></h3>
               <p class="product-tag">BRILLANCE</p>
-              <p class="product-price">145 $</p>
+              <div class="product-footer">
+                <p class="product-price">145 $</p>
+                <button type="button" class="btn btn-violet product-add-to-cart">Ajouter au panier</button>
+              </div>
             </div>
           </article>
-          <article class="product-card product-card--elegant">
-            <div class="product-image" style="background: url('Images Sites Macrinère/Produit 4.jpg') center/cover;"></div>
+          <article class="product-card product-card--elegant" data-product-slug="soins-solaires">
+            <a href="product.html?slug=soins-solaires" class="product-image" style="background: url('Images Sites Macrinère/Produit 4.jpg') center/cover;"></a>
             <div class="product-info">
-              <h3 class="product-name">Soins Solaires</h3>
+              <h3 class="product-name"><a href="product.html?slug=soins-solaires">Soins Solaires</a></h3>
               <p class="product-tag">PROTECTION</p>
-              <p class="product-price">255 $</p>
+              <div class="product-footer">
+                <p class="product-price">255 $</p>
+                <button type="button" class="btn btn-violet product-add-to-cart">Ajouter au panier</button>
+              </div>
             </div>
           </article>
-          <article class="product-card product-card--elegant">
-            <div class="product-image" style="background: url('Images Sites Macrinère/Hero Produits.jpg.jpg') center/cover;"></div>
+          <article class="product-card product-card--elegant" data-product-slug="huile-capillaire-cocotte">
+            <a href="product.html?slug=huile-capillaire-cocotte" class="product-image" style="background: url('Images Sites Macrinère/Hero Produits.jpg.jpg') center/cover;"></a>
             <div class="product-info">
-              <h3 class="product-name">Huile Capillaire Cocotte</h3>
+              <h3 class="product-name"><a href="product.html?slug=huile-capillaire-cocotte">Huile Capillaire Cocotte</a></h3>
               <p class="product-tag">NOURRISTANT</p>
-              <p class="product-price">195 $</p>
+              <div class="product-footer">
+                <p class="product-price">195 $</p>
+                <button type="button" class="btn btn-violet product-add-to-cart">Ajouter au panier</button>
+              </div>
             </div>
           </article>
-          <article class="product-card product-card--elegant">
-            <div class="product-image" style="background: url('Images Sites Macrinère/Produit 6.jpg') center/cover;"></div>
+          <article class="product-card product-card--elegant" data-product-slug="coiffant-eclat-karite">
+            <a href="product.html?slug=coiffant-eclat-karite" class="product-image" style="background: url('Images Sites Macrinère/Produit 6.jpg') center/cover;"></a>
             <div class="product-info">
-              <h3 class="product-name">Coiffant Éclat Karité</h3>
+              <h3 class="product-name"><a href="product.html?slug=coiffant-eclat-karite">Coiffant Éclat Karité</a></h3>
               <p class="product-tag">BOUCLES</p>
-              <p class="product-price">165 $</p>
+              <div class="product-footer">
+                <p class="product-price">165 $</p>
+                <button type="button" class="btn btn-violet product-add-to-cart">Ajouter au panier</button>
+              </div>
             </div>
           </article>
-          <article class="product-card product-card--elegant">
-            <div class="product-image" style="background: url('Images Sites Macrinère/serum reparateur.jpg') center/cover;"></div>
+          <article class="product-card product-card--elegant" data-product-slug="serum-reparateur">
+            <a href="product.html?slug=serum-reparateur" class="product-image" style="background: url('Images Sites Macrinère/serum reparateur.jpg') center/cover;"></a>
             <div class="product-info">
-              <h3 class="product-name">Sérum Réparateur</h3>
+              <h3 class="product-name"><a href="product.html?slug=serum-reparateur">Sérum Réparateur</a></h3>
               <p class="product-tag">RÉPARATION</p>
-              <p class="product-price">210 $</p>
+              <div class="product-footer">
+                <p class="product-price">210 $</p>
+                <button type="button" class="btn btn-violet product-add-to-cart">Ajouter au panier</button>
+              </div>
             </div>
           </article>
-          <article class="product-card product-card--elegant">
-            <div class="product-image" style="background: url('Images Sites Macrinère/Image Produit 8.jpg') center/cover;"></div>
+          <article class="product-card product-card--elegant" data-product-slug="baume-hydratant">
+            <a href="product.html?slug=baume-hydratant" class="product-image" style="background: url('Images Sites Macrinère/Image Produit 8.jpg') center/cover;"></a>
             <div class="product-info">
-              <h3 class="product-name">Baume Hydratant</h3>
+              <h3 class="product-name"><a href="product.html?slug=baume-hydratant">Baume Hydratant</a></h3>
               <p class="product-tag">HYDRATATION</p>
-              <p class="product-price">175 $</p>
+              <div class="product-footer">
+                <p class="product-price">175 $</p>
+                <button type="button" class="btn btn-violet product-add-to-cart">Ajouter au panier</button>
+              </div>
             </div>
           </article>
         </div>
@@ -112,7 +139,7 @@
   <footer class="footer" id="contact">
     <div class="container footer-grid">
       <div class="footer-brand">
-        <strong class="footer-logo">Ma Crinière.</strong>
+        <img src="Images Sites Macrinère/Logo Ma Crinière.png" alt="Ma Crinière" class="footer-logo-img">
         <p>Votre boutique spécialisée de créations & d'idées. Des extraits précieux pour sublimer votre projet de rêve.</p>
         <p class="footer-copy">© 2024 Ma Crinière. Tous droits réservés.</p>
       </div>
@@ -144,5 +171,6 @@
   </footer>
 
   <script src="script.js"></script>
+  <script type="module" src="js/products-listing.js"></script>
 </body>
 </html>
