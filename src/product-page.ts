@@ -18,6 +18,35 @@ function formatPrice(price: number): string {
   return `${price} $`;
 }
 
+/** Avis clients fictifs affichés sur chaque fiche produit */
+const MOCK_REVIEWS = [
+  { author: 'Sophie L.', rating: 5, date: '15 janv. 2025', text: 'Produit au top, ma chevelure est plus douce et brillante. Je recommande les yeux fermés.' },
+  { author: 'Marie K.', rating: 4, date: '8 janv. 2025', text: 'Très satisfaite du résultat. Livraison rapide et emballage soigné.' },
+  { author: 'Claire D.', rating: 5, date: '2 janv. 2025', text: 'Enfin un soin qui tient ses promesses. J\'achète à nouveau sans hésiter.' },
+];
+
+function renderReviews(): string {
+  return `
+    <section class="product-page-reviews" aria-label="Avis clients">
+      <h2 class="product-page-reviews-title">Avis clients</h2>
+      <div class="product-page-reviews-list">
+        ${MOCK_REVIEWS.map(
+          (r) => `
+        <article class="product-page-review">
+          <div class="product-page-review-header">
+            <span class="product-page-review-author">${r.author}</span>
+            <span class="product-page-review-stars" aria-label="${r.rating} sur 5">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</span>
+            <time class="product-page-review-date">${r.date}</time>
+          </div>
+          <p class="product-page-review-text">${r.text}</p>
+        </article>
+        `
+        ).join('')}
+      </div>
+    </section>
+  `;
+}
+
 function renderGallery(images: string[], name: string): string {
   return `
     <div class="product-page-gallery">
@@ -104,6 +133,7 @@ function renderProduct(product: Product): void {
           </div>
         </div>
       </div>
+      ${renderReviews()}
       ${similar.length > 0 ? renderSimilar(similar) : ''}
     </div>
   `;
@@ -158,9 +188,10 @@ function renderProduct(product: Product): void {
 
   // Add to cart
   root.querySelector('.product-page-add-cart')?.addEventListener('click', () => {
+    const qty = getQty();
     addToCart(
-      { productId: product.id, name: product.name, price, image: product.image },
-      getQty()
+      { productId: product.id, name: product.name, price, image: product.image, quantity: qty },
+      qty
     );
     const btn = root.querySelector('.product-page-add-cart');
     if (btn) {
@@ -177,9 +208,10 @@ function renderProduct(product: Product): void {
   // Buy now
   root.querySelector('.product-page-buy-now')?.addEventListener('click', (e) => {
     e.preventDefault();
+    const qty = getQty();
     addToCart(
-      { productId: product.id, name: product.name, price, image: product.image },
-      getQty()
+      { productId: product.id, name: product.name, price, image: product.image, quantity: qty },
+      qty
     );
     window.location.href = 'checkout.html';
   });

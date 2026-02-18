@@ -12,6 +12,28 @@ function formatPrice(price) {
   return price + ' $';
 }
 
+var MOCK_REVIEWS = [
+  { author: 'Sophie L.', rating: 5, date: '15 janv. 2025', text: 'Produit au top, ma chevelure est plus douce et brillante. Je recommande les yeux fermés.' },
+  { author: 'Marie K.', rating: 4, date: '8 janv. 2025', text: 'Très satisfaite du résultat. Livraison rapide et emballage soigné.' },
+  { author: 'Claire D.', rating: 5, date: '2 janv. 2025', text: "Enfin un soin qui tient ses promesses. J'achète à nouveau sans hésiter." }
+];
+
+function renderReviews() {
+  var html = '<section class="product-page-reviews" aria-label="Avis clients">';
+  html += '<h2 class="product-page-reviews-title">Avis clients</h2>';
+  html += '<div class="product-page-reviews-list">';
+  MOCK_REVIEWS.forEach(function (r) {
+    html += '<article class="product-page-review">';
+    html += '<div class="product-page-review-header">';
+    html += '<span class="product-page-review-author">' + r.author + '</span>';
+    html += '<span class="product-page-review-stars" aria-label="' + r.rating + ' sur 5">' + '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating) + '</span>';
+    html += '<time class="product-page-review-date">' + r.date + '</time>';
+    html += '</div><p class="product-page-review-text">' + r.text + '</p></article>';
+  });
+  html += '</div></section>';
+  return html;
+}
+
 function renderGallery(images, name) {
   var html = '<div class="product-page-gallery">';
   html += '<div class="product-page-main-image" style="background: url(\'' + images[0] + '\') center/cover;" role="img" aria-label="' + name + '"></div>';
@@ -73,6 +95,7 @@ function renderProduct(product) {
   inner += '<div class="product-page-features"><h3 class="product-page-features-title">Points forts</h3><ul>';
   product.features.forEach(function (f) { inner += '<li>' + f + '</li>'; });
   inner += '</ul></div></div></div>';
+  inner += renderReviews();
   if (similar.length > 0) inner += renderSimilar(similar);
   inner += '</div>';
   root.innerHTML = inner;
