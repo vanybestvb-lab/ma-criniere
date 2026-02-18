@@ -29,21 +29,43 @@
     <section class="commande-form-section" style="padding-top: 2rem; padding-bottom: 4rem;">
       <div class="container container--form">
         <h1 class="section-title-maskin" style="margin-bottom: 1.5rem;">Commande</h1>
-        <div class="checkout-steps">
-          <span class="checkout-step done">1. Panier</span>
-          <span class="checkout-step active">2. Infos client</span>
-          <span class="checkout-step">3. Livraison</span>
-          <span class="checkout-step">4. Paiement</span>
-          <span class="checkout-step">5. Confirmation</span>
+
+        <!-- Indicateur d'étapes -->
+        <div class="checkout-steps" role="tablist" aria-label="Étapes de la commande">
+          <button type="button" id="step1" class="checkout-step" data-step="1" aria-selected="true" aria-label="Étape 1 : Panier">
+            <span class="checkout-step-num">1</span>
+            <span class="checkout-step-label">Panier</span>
+          </button>
+          <button type="button" id="step2" class="checkout-step" data-step="2" aria-selected="false" aria-label="Étape 2 : Infos client">
+            <span class="checkout-step-num">2</span>
+            <span class="checkout-step-label">Infos client</span>
+          </button>
+          <button type="button" id="step3" class="checkout-step" data-step="3" aria-selected="false" aria-label="Étape 3 : Livraison">
+            <span class="checkout-step-num">3</span>
+            <span class="checkout-step-label">Livraison</span>
+          </button>
+          <button type="button" id="step4" class="checkout-step" data-step="4" aria-selected="false" aria-label="Étape 4 : Paiement">
+            <span class="checkout-step-num">4</span>
+            <span class="checkout-step-label">Paiement</span>
+          </button>
+          <button type="button" id="step5" class="checkout-step" data-step="5" aria-selected="false" aria-label="Étape 5 : Confirmation">
+            <span class="checkout-step-num">5</span>
+            <span class="checkout-step-label">Confirmation</span>
+          </button>
         </div>
 
-        <div data-checkout-panel="1" class="checkout-panel">
-          <p>Récapitulatif dans l’étape suivante. Cliquez sur « 2. Infos client » pour continuer.</p>
-          <a href="panier.html" class="btn btn-violet">Retour au panier</a>
+        <!-- Étape 1 : Récap panier -->
+        <div data-checkout-panel="1" class="checkout-panel active" role="tabpanel" aria-labelledby="step1" id="panel1">
+          <div class="checkout-cart-recap" data-checkout-cart-recap></div>
+          <div class="checkout-actions">
+            <a href="panier.html" class="btn btn-hero-maskin">← Retour au panier</a>
+            <button type="button" class="btn btn-violet" data-checkout-next>Continuer</button>
+          </div>
         </div>
 
-        <div data-checkout-panel="2" class="checkout-panel active">
-          <form class="form-commande" data-checkout-form>
+        <!-- Étape 2 : Infos client -->
+        <div data-checkout-panel="2" class="checkout-panel" role="tabpanel" aria-labelledby="step2" id="panel2" hidden>
+          <form class="form-commande" data-checkout-form novalidate>
             <div class="form-row form-row--double">
               <div class="form-group">
                 <label for="prenom">Prénom <span class="required">*</span></label>
@@ -73,15 +95,25 @@
               </div>
             </div>
           </form>
+          <div class="checkout-actions">
+            <button type="button" class="btn btn-hero-maskin" data-checkout-prev>← Précédent</button>
+            <button type="button" class="btn btn-violet" data-checkout-next>Suivant</button>
+          </div>
         </div>
 
-        <div data-checkout-panel="3" class="checkout-panel">
-          <h3 class="section-title-maskin" style="font-size: 1.1rem; margin-bottom: 1rem;">Choisissez une option de livraison</h3>
+        <!-- Étape 3 : Livraison -->
+        <div data-checkout-panel="3" class="checkout-panel" role="tabpanel" aria-labelledby="step3" id="panel3" hidden>
+          <h3 class="checkout-panel-title">Choisissez une option de livraison</h3>
           <div data-shipping-options class="shipping-options"></div>
+          <div class="checkout-actions">
+            <button type="button" class="btn btn-hero-maskin" data-checkout-prev>← Précédent</button>
+            <button type="button" class="btn btn-violet" data-checkout-next>Suivant</button>
+          </div>
         </div>
 
-        <div data-checkout-panel="4" class="checkout-panel">
-          <h3 class="section-title-maskin" style="font-size: 1.1rem; margin-bottom: 1rem;">Mode de paiement</h3>
+        <!-- Étape 4 : Paiement -->
+        <div data-checkout-panel="4" class="checkout-panel" role="tabpanel" aria-labelledby="step4" id="panel4" hidden>
+          <h3 class="checkout-panel-title">Mode de paiement</h3>
           <div class="payment-options">
             <label class="payment-option selected">
               <input type="radio" name="payment" value="mobile_money" checked>
@@ -102,10 +134,14 @@
             <p>Livraison : <strong data-summary-shipping>0 $</strong></p>
             <p>Total : <strong data-summary-total>0 $</strong></p>
           </div>
-          <button type="button" class="btn btn-violet btn-submit" data-checkout-submit>Confirmer la commande</button>
+          <div class="checkout-actions">
+            <button type="button" class="btn btn-hero-maskin" data-checkout-prev>← Précédent</button>
+            <button type="button" class="btn btn-violet btn-submit" data-checkout-submit>Confirmer la commande</button>
+          </div>
         </div>
 
-        <div data-checkout-panel="5" class="checkout-panel">
+        <!-- Étape 5 : Confirmation -->
+        <div data-checkout-panel="5" class="checkout-panel" role="tabpanel" aria-labelledby="step5" id="panel5" hidden>
           <div class="confirmation-box">
             <h2>Merci pour votre commande !</h2>
             <p>Numéro de commande : <span class="order-id" data-order-id></span></p>
@@ -117,12 +153,13 @@
     </section>
   </main>
 
+  <!-- Footer -->
   <footer class="footer" id="contact">
     <div class="container footer-grid">
       <div class="footer-brand">
         <img src="Images Sites Macrinère/Logo Ma Crinière.png" alt="Ma Crinière" class="footer-logo-img">
-        <p>Votre boutique spécialisée de créations & d'idées.</p>
-        <p class="footer-copy">© 2024 Ma Crinière. Tous droits réservés.</p>
+        <p>Votre boutique spécialisée de créations & d'idées. Des extraits précieux pour sublimer votre projet de rêve.</p>
+        <p class="footer-copy">© 2024 Ma Crinière. Tous droits réservés. Boutique e-commerce propulsée par Ma Crinière.</p>
       </div>
       <div class="footer-col">
         <h4>NAVIGATION</h4>
@@ -134,10 +171,25 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h4>CONTACT</h4>
-        <p class="footer-contact">📍 21 Avenue D.A.P.L.<br>Germano de Giramio</p>
-        <p class="footer-contact">📞 +33 2 87 84 71 280</p>
+        <h4>INFORMATIONS</h4>
+        <ul>
+          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="#">Livraison</a></li>
+          <li><a href="#">Retours</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
       </div>
+      <div class="footer-col">
+        <h4>CONTACT</h4>
+        <p class="footer-contact">📍 ADRESSE<br>21 Avenue D.A.P.L.<br>Germano de Giramio</p>
+        <p class="footer-contact">📞 CONTACTER<br>+33 2 87 84 71 280</p>
+        <p class="footer-contact">📷 RÉSEAUX SOCIAUX<br>@ma_criniere</p>
+      </div>
+    </div>
+    <div class="footer-pagination">
+      <button aria-label="Page précédente">&lt;</button>
+      <span>1</span>
+      <button aria-label="Page suivante">&gt;</button>
     </div>
   </footer>
 

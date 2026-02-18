@@ -28,16 +28,20 @@
 
   <main class="page-main">
     <section class="products products-page" data-product-root>
-      <!-- Rempli par product-page.js -->
+      <div class="container container--product">
+        <p class="product-page-loading" data-product-loading>Chargement du produit…</p>
+        <p class="product-page-loading-hint" data-product-loading-hint>Si la page reste vide, ouvrez le site via un serveur local : <code>npm run serve</code> à la racine du projet.</p>
+      </div>
     </section>
   </main>
 
+  <!-- Footer -->
   <footer class="footer" id="contact">
     <div class="container footer-grid">
       <div class="footer-brand">
         <img src="Images Sites Macrinère/Logo Ma Crinière.png" alt="Ma Crinière" class="footer-logo-img">
         <p>Votre boutique spécialisée de créations & d'idées. Des extraits précieux pour sublimer votre projet de rêve.</p>
-        <p class="footer-copy">© 2024 Ma Crinière. Tous droits réservés.</p>
+        <p class="footer-copy">© 2024 Ma Crinière. Tous droits réservés. Boutique e-commerce propulsée par Ma Crinière.</p>
       </div>
       <div class="footer-col">
         <h4>NAVIGATION</h4>
@@ -59,10 +63,15 @@
       </div>
       <div class="footer-col">
         <h4>CONTACT</h4>
-        <p class="footer-contact">📍 21 Avenue D.A.P.L.<br>Germano de Giramio</p>
-        <p class="footer-contact">📞 +33 2 87 84 71 280</p>
-        <p class="footer-contact">📷 @ma_criniere</p>
+        <p class="footer-contact">📍 ADRESSE<br>21 Avenue D.A.P.L.<br>Germano de Giramio</p>
+        <p class="footer-contact">📞 CONTACTER<br>+33 2 87 84 71 280</p>
+        <p class="footer-contact">📷 RÉSEAUX SOCIAUX<br>@ma_criniere</p>
       </div>
+    </div>
+    <div class="footer-pagination">
+      <button aria-label="Page précédente">&lt;</button>
+      <span>1</span>
+      <button aria-label="Page suivante">&gt;</button>
     </div>
   </footer>
 
