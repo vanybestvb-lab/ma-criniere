@@ -13,11 +13,20 @@
   <header class="header">
     <div class="container header-inner">
       <a href="index.html" class="logo"><img src="Images Sites Macrinère/Logo Ma Crinière Violet.png" alt="Ma Crinière" class="logo-img"></a>
-      <nav class="nav">
+      <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" hidden>
+      <label for="nav-toggle" class="nav-toggle-label" aria-label="Ouvrir le menu"><span></span><span></span><span></span></label>
+      <nav class="nav nav-desktop">
         <a href="index.html">ACCUEIL</a>
         <a href="a-propos.html">À PROPOS</a>
         <a href="produits.html" class="nav-active">PRODUITS</a>
       </nav>
+      <div class="mobile-menu-panel" id="mobile-menu">
+        <img src="Images Sites Macrinère/Logo Ma Crinière Violet.png" alt="Ma Crinière" class="mobile-menu-logo">
+        <nav class="nav nav-mobile">
+          <a href="index.html">Accueil</a>
+          <a href="produits.html">Boutique</a>
+        </nav>
+      </div>
       <a href="panier.html" class="header-cart-icon" aria-label="Panier">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
         <span class="cart-badge" data-cart-badge hidden>0</span>
@@ -168,11 +177,6 @@
         <p class="footer-contact">📞 CONTACTER<br>+33 2 87 84 71 280</p>
         <p class="footer-contact">📷 RÉSEAUX SOCIAUX<br>@ma_criniere</p>
       </div>
-    </div>
-    <div class="footer-pagination">
-      <button aria-label="Page précédente">&lt;</button>
-      <span>1</span>
-      <button aria-label="Page suivante">&gt;</button>
     </div>
   </footer>
 
