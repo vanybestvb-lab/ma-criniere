@@ -17,7 +17,13 @@ const nav = [
   { href: "/admin/settings", label: "Paramètres" },
 ];
 
-export function AdminShell({ children }: { children: React.ReactNode }) {
+export function AdminShell({
+  children,
+  showDemoBadge = false,
+}: {
+  children: React.ReactNode;
+  showDemoBadge?: boolean;
+}) {
   const pathname = usePathname();
   const isLogin = pathname === "/admin/login";
 
@@ -33,7 +39,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             Ma Crinière Admin
           </Link>
         </div>
-        {process.env.NEXT_PUBLIC_DEMO_MODE === "true" && (
+        {showDemoBadge && (
           <div className="border-b border-amber-200 bg-amber-50 px-4 py-2">
             <span className="inline-flex items-center rounded-full bg-amber-400 px-2.5 py-0.5 text-xs font-semibold text-amber-900">
               DEMO MODE

@@ -35,7 +35,8 @@ const emptyKpis: DashboardKpis = {
   criticalStockCount: 0,
 };
 
-export async function getDashboardKpis(): Promise<DashboardKpis> {
+export async function getDashboardKpis(useDemoData?: boolean): Promise<DashboardKpis> {
+  if (useDemoData || isDemoModeEnabled()) return mockDashboardKpis;
   try {
   const today = startOfDay(new Date());
   const day7 = subDays(today, 7);
@@ -84,7 +85,8 @@ export async function getDashboardKpis(): Promise<DashboardKpis> {
   }
 }
 
-export async function getTopProducts(limit: number = 5): Promise<TopProduct[]> {
+export async function getTopProducts(limit: number = 5, useDemoData?: boolean): Promise<TopProduct[]> {
+  if (useDemoData || isDemoModeEnabled()) return mockTopProducts.slice(0, limit);
   try {
   const all = await prisma.orderItem.findMany({
     where: { order: { status: { in: ["PAID", "PREPARING", "SHIPPED", "DELIVERED"] } } },
@@ -107,7 +109,8 @@ export async function getTopProducts(limit: number = 5): Promise<TopProduct[]> {
   }
 }
 
-export async function getOrdersByStatus(): Promise<{ status: string; count: number }[]> {
+export async function getOrdersByStatus(useDemoData?: boolean): Promise<{ status: string; count: number }[]> {
+  if (useDemoData || isDemoModeEnabled()) return mockOrdersByStatus;
   try {
   const groups = await prisma.order.groupBy({
     by: ["status"],
@@ -120,7 +123,8 @@ export async function getOrdersByStatus(): Promise<{ status: string; count: numb
   }
 }
 
-export async function getRecentOrders(limit: number = 10) {
+export async function getRecentOrders(limit: number = 10, useDemoData?: boolean) {
+  if (useDemoData || isDemoModeEnabled()) return mockRecentOrders.slice(0, limit);
   try {
   return prisma.order.findMany({
     take: limit,
@@ -141,7 +145,8 @@ export async function getRecentOrders(limit: number = 10) {
   }
 }
 
-export async function getRevenueByDay(days: number = 14) {
+export async function getRevenueByDay(days: number = 14, useDemoData?: boolean) {
+  if (useDemoData || isDemoModeEnabled()) return getMockRevenueByDay(days);
   try {
   const start = subDays(startOfDay(new Date()), days);
   const orders = await prisma.order.findMany({

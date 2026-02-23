@@ -1,5 +1,6 @@
 import Link from "next/link";
 import nextDynamic from "next/dynamic";
+import { cookies } from "next/headers";
 import {
   getDashboardKpis,
   getTopProducts,
@@ -16,12 +17,17 @@ const DashboardChart = nextDynamic(
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboardPage() {
+  const cookieStore = await cookies();
+  const useDemoData = !!(
+    cookieStore.get("admin_demo")?.value ||
+    cookieStore.get("demo_auth")?.value
+  );
   const [kpis, topProducts, ordersByStatus, recentOrders, revenueByDay] = await Promise.all([
-    getDashboardKpis(),
-    getTopProducts(5),
-    getOrdersByStatus(),
-    getRecentOrders(10),
-    getRevenueByDay(14),
+    getDashboardKpis(useDemoData),
+    getTopProducts(5, useDemoData),
+    getOrdersByStatus(useDemoData),
+    getRecentOrders(10, useDemoData),
+    getRevenueByDay(14, useDemoData),
   ]);
 
   const kpiCards = [
