@@ -16,7 +16,7 @@ export async function createAuditLog(p: AuditPayload): Promise<void> {
       action: p.action,
       entity: p.entity,
       entityId: p.entityId ?? null,
-      payload: p.payload ?? undefined,
+      payload: p.payload != null ? JSON.stringify(p.payload) : null,
       actorId: p.actorId ?? null,
       ip: p.ip ?? null,
       userAgent: p.userAgent ?? null,
