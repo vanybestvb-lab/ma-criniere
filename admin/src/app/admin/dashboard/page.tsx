@@ -1,5 +1,5 @@
 import Link from "next/link";
-import dynamic from "next/dynamic";
+import nextDynamic from "next/dynamic";
 import {
   getDashboardKpis,
   getTopProducts,
@@ -8,7 +8,7 @@ import {
   getRevenueByDay,
 } from "@/services/dashboard.service";
 
-const DashboardChart = dynamic(
+const DashboardChart = nextDynamic(
   () => import("@/components/Charts/DashboardChart").then((m) => m.DashboardChart),
   { ssr: false }
 );
