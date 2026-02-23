@@ -18,3 +18,8 @@ npm-debug.log*
 # node_modules/
 # .env
 # dist/
+
+# SQLite (admin)
+admin/prisma/*.db
+admin/prisma/*.db-journal
+node_modules

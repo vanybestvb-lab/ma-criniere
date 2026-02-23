@@ -48,7 +48,7 @@ function getMaxQuantity(productId: string): number {
 
 function renderCart(): void {
   const root = document.querySelector(CART_ROOT);
-  const emptyEl = document.querySelector(CART_EMPTY);
+  const emptyEl = document.querySelector<HTMLElement>(CART_EMPTY);
   const tbody = document.querySelector(CART_TABLE_BODY);
   const subtotalEl = document.querySelector(CART_SUBTOTAL);
   const totalEl = document.querySelector(CART_TOTAL);
@@ -57,9 +57,9 @@ function renderCart(): void {
   const items = getCartItems();
   const total = getCartTotal();
 
-  const tableWrap = root.querySelector('[data-cart-table-wrap]');
+  const tableWrap = root.querySelector<HTMLElement>('[data-cart-table-wrap]');
   if (emptyEl) emptyEl.hidden = items.length > 0;
-  if (tableWrap) (tableWrap as HTMLElement).hidden = items.length === 0;
+  if (tableWrap) tableWrap.hidden = items.length === 0;
   if (tbody) {
     if (items.length === 0) {
       tbody.innerHTML = '';
@@ -71,17 +71,9 @@ function renderCart(): void {
         const productId = row.getAttribute('data-product-id');
         if (!productId) return;
         const maxQty = getMaxQuantity(productId);
-        const qtyDisplay = row.querySelector('[data-qty-display]');
         const minusBtn = row.querySelector('button[data-qty="-1"]');
         const plusBtn = row.querySelector('button[data-qty="+1"]');
         const removeBtn = row.querySelector('.cart-remove');
-
-        const updateQty = (): void => {
-          const item = items.find((i) => i.productId === productId);
-          if (!item) return;
-          setQuantity(productId, item.quantity);
-          renderCart();
-        };
 
         minusBtn?.addEventListener('click', () => {
           const item = items.find((i) => i.productId === productId);

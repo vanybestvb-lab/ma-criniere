@@ -24,6 +24,7 @@ function bindAddToCart(): void {
           name: product.name,
           price,
           image: product.image,
+          quantity: 1,
         },
         1
       );

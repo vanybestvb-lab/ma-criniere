@@ -3,7 +3,6 @@ import { getCartItems, getCartTotal, clearCart } from './cart-store.js';
 import { createOrder } from './order-store.js';
 import type { Customer, OrderItem, ShippingOption } from './types.js';
 
-const STEP_ATTR = 'data-checkout-step';
 const PANEL_ATTR = 'data-checkout-panel';
 const SHIPPING_OPTIONS: ShippingOption[] = [
   { id: 'express-24', label: 'Livraison express 24h (70 km)', price: 15, delay: '24h' },
@@ -16,16 +15,6 @@ let selectedPayment = 'mobile_money';
 
 function formatPrice(price: number): string {
   return `${price} $`;
-}
-
-function getCurrentStep(): number {
-  const step = document.querySelector(`.checkout-step.${STEP_ATTR}`);
-  const idx = document.querySelectorAll('.checkout-step').length;
-  const active = document.querySelector('.checkout-step.active');
-  if (!active) return 1;
-  const steps = Array.from(document.querySelectorAll('.checkout-step'));
-  const i = steps.indexOf(active as Element);
-  return i >= 0 ? i + 1 : 1;
 }
 
 function showStep(stepIndex: number): void {
@@ -87,7 +76,6 @@ function bindPayment(): void {
 }
 
 function updateOrderSummary(): void {
-  const items = getCartItems();
   const subtotal = getCartTotal();
   const shippingCost = selectedShipping.price;
   const total = subtotal + shippingCost;

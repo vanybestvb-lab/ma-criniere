@@ -1,1 +1,2 @@
-/** Types (interfaces) — élagués à la compilation */
+/** Types stricts pour Ma Crinière — e-commerce */
+export {};

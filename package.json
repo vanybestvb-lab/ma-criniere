@@ -5,7 +5,11 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "serve": "npx --yes serve . -p 3000"
+    "serve": "npx --yes serve . -p 3000",
+    "dev": "npm run dev --prefix admin",
+    "db:generate": "npm run db:generate --prefix admin",
+    "db:push": "npm run db:push --prefix admin",
+    "db:seed": "npm run db:seed --prefix admin"
   },
   "devDependencies": {
     "typescript": "^5.3.0"
