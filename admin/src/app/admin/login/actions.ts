@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import * as bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { isDatabaseAvailable } from "@/lib/prisma";
 
 export async function loginAction(formData: FormData) {
   const email = formData.get("email");
@@ -12,6 +13,11 @@ export async function loginAction(formData: FormData) {
 
   if (typeof email !== "string" || typeof password !== "string") {
     redirect("/admin/login?error=missing");
+  }
+
+  const dbOk = await isDatabaseAvailable();
+  if (!dbOk) {
+    redirect("/admin/login?error=db");
   }
 
   let user;
@@ -52,4 +58,17 @@ export async function loginAction(formData: FormData) {
   });
 
   redirect(typeof redirectTo === "string" ? redirectTo : "/admin/dashboard");
+}
+
+/** Accès au back-office sans base de données (mode visionnage / démo). */
+export async function demoModeAction() {
+  const cookieStore = await cookies();
+  cookieStore.set("admin_demo", "1", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    maxAge: 60 * 60 * 24,
+    path: "/",
+  });
+  redirect("/admin/dashboard");
 }

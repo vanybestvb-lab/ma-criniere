@@ -3,9 +3,14 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 export default async function AdminPromotionsPage() {
-  const coupons = await prisma.coupon.findMany({
-    orderBy: { endsAt: "desc" },
-  });
+  let coupons: Awaited<ReturnType<typeof prisma.coupon.findMany>> = [];
+  try {
+    coupons = await prisma.coupon.findMany({
+      orderBy: { endsAt: "desc" },
+    });
+  } catch {
+    // Mode démo sans base de données
+  }
 
   return (
     <div className="space-y-6">

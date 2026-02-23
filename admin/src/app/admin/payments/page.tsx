@@ -3,11 +3,16 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 export default async function AdminPaymentsPage() {
-  const payments = await prisma.payment.findMany({
-    take: 50,
-    orderBy: { createdAt: "desc" },
-    include: { order: { select: { orderNumber: true } } },
-  });
+  let payments: Awaited<ReturnType<typeof prisma.payment.findMany>> = [];
+  try {
+    payments = await prisma.payment.findMany({
+      take: 50,
+      orderBy: { createdAt: "desc" },
+      include: { order: { select: { orderNumber: true } } },
+    });
+  } catch {
+    // Mode démo sans base de données
+  }
 
   return (
     <div className="space-y-6">

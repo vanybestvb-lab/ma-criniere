@@ -3,11 +3,16 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 export default async function AdminShipmentsPage() {
-  const shipments = await prisma.shipment.findMany({
-    take: 50,
-    orderBy: { createdAt: "desc" },
-    include: { order: { select: { orderNumber: true } } },
-  });
+  let shipments: Awaited<ReturnType<typeof prisma.shipment.findMany>> = [];
+  try {
+    shipments = await prisma.shipment.findMany({
+      take: 50,
+      orderBy: { createdAt: "desc" },
+      include: { order: { select: { orderNumber: true } } },
+    });
+  } catch {
+    // Mode démo sans base de données
+  }
 
   return (
     <div className="space-y-6">

@@ -3,10 +3,16 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 export default async function AdminCmsPage() {
-  const [pages, banners] = await Promise.all([
-    prisma.cmsPage.findMany({ orderBy: { title: "asc" } }),
-    prisma.banner.findMany({ orderBy: { sortOrder: "asc" } }),
-  ]);
+  let pages: Awaited<ReturnType<typeof prisma.cmsPage.findMany>> = [];
+  let banners: Awaited<ReturnType<typeof prisma.banner.findMany>> = [];
+  try {
+    [pages, banners] = await Promise.all([
+      prisma.cmsPage.findMany({ orderBy: { title: "asc" } }),
+      prisma.banner.findMany({ orderBy: { sortOrder: "asc" } }),
+    ]);
+  } catch {
+    // Mode démo sans base de données
+  }
 
   return (
     <div className="space-y-8">

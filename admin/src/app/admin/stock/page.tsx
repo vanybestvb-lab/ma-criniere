@@ -3,10 +3,15 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 export default async function AdminStockPage() {
-  const levels = await prisma.inventoryLevel.findMany({
-    include: { product: true },
-    orderBy: { quantity: "asc" },
-  });
+  let levels: Awaited<ReturnType<typeof prisma.inventoryLevel.findMany>> = [];
+  try {
+    levels = await prisma.inventoryLevel.findMany({
+      include: { product: true },
+      orderBy: { quantity: "asc" },
+    });
+  } catch {
+    // Mode démo sans base de données
+  }
 
   return (
     <div className="space-y-6">

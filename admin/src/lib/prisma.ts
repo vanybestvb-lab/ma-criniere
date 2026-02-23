@@ -42,3 +42,13 @@ export const prisma =
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 }
+
+/** Vérifie si la base est accessible (pour afficher un message sur la page de login). */
+export async function isDatabaseAvailable(): Promise<boolean> {
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    return true;
+  } catch {
+    return false;
+  }
+}

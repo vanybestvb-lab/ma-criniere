@@ -4,11 +4,16 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 export default async function AdminCustomersPage() {
-  const customers = await prisma.customer.findMany({
-    take: 50,
-    orderBy: { createdAt: "desc" },
-    include: { _count: { select: { orders: true } } },
-  });
+  let customers: Awaited<ReturnType<typeof prisma.customer.findMany>> = [];
+  try {
+    customers = await prisma.customer.findMany({
+      take: 50,
+      orderBy: { createdAt: "desc" },
+      include: { _count: { select: { orders: true } } },
+    });
+  } catch {
+    // Mode démo sans base de données
+  }
 
   return (
     <div className="space-y-6">

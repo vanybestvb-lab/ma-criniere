@@ -17,7 +17,18 @@ export interface TopProduct {
   revenue: number;
 }
 
+const emptyKpis: DashboardKpis = {
+  revenueToday: 0,
+  revenue7d: 0,
+  revenue30d: 0,
+  totalOrders: 0,
+  pendingOrders: 0,
+  averageOrderValue: 0,
+  criticalStockCount: 0,
+};
+
 export async function getDashboardKpis(): Promise<DashboardKpis> {
+  try {
   const today = startOfDay(new Date());
   const day7 = subDays(today, 7);
   const day30 = subDays(today, 30);
@@ -58,10 +69,14 @@ export async function getDashboardKpis(): Promise<DashboardKpis> {
     pendingOrders,
     averageOrderValue: avg,
     criticalStockCount: countWithCritical,
-  };
+    };
+  } catch {
+    return emptyKpis;
+  }
 }
 
 export async function getTopProducts(limit: number = 5): Promise<TopProduct[]> {
+  try {
   const all = await prisma.orderItem.findMany({
     where: { order: { status: { in: ["PAID", "PREPARING", "SHIPPED", "DELIVERED"] } } },
     select: { name: true, quantity: true, subtotal: true },
@@ -77,17 +92,25 @@ export async function getTopProducts(limit: number = 5): Promise<TopProduct[]> {
     .map(([name, data]) => ({ name, quantity: data.quantity, revenue: data.revenue }))
     .sort((a, b) => b.revenue - a.revenue)
     .slice(0, limit);
+  } catch {
+    return [];
+  }
 }
 
 export async function getOrdersByStatus(): Promise<{ status: string; count: number }[]> {
+  try {
   const groups = await prisma.order.groupBy({
     by: ["status"],
     _count: { id: true },
   });
   return groups.map((g) => ({ status: g.status, count: g._count.id }));
+  } catch {
+    return [];
+  }
 }
 
 export async function getRecentOrders(limit: number = 10) {
+  try {
   return prisma.order.findMany({
     take: limit,
     orderBy: { createdAt: "desc" },
@@ -101,9 +124,13 @@ export async function getRecentOrders(limit: number = 10) {
       lastName: true,
     },
   });
+  } catch {
+    return [];
+  }
 }
 
 export async function getRevenueByDay(days: number = 14) {
+  try {
   const start = subDays(startOfDay(new Date()), days);
   const orders = await prisma.order.findMany({
     where: {
@@ -119,4 +146,7 @@ export async function getRevenueByDay(days: number = 14) {
     byDay.set(key, (byDay.get(key) ?? 0) + Number(o.total));
   }
   return Array.from(byDay.entries()).map(([date, revenue]) => ({ date, revenue }));
+  } catch {
+    return [];
+  }
 }

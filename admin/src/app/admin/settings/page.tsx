@@ -3,7 +3,12 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 
 export default async function AdminSettingsPage() {
-  const zones = await prisma.shippingZone.findMany({ orderBy: { code: "asc" } });
+  let zones: Awaited<ReturnType<typeof prisma.shippingZone.findMany>> = [];
+  try {
+    zones = await prisma.shippingZone.findMany({ orderBy: { code: "asc" } });
+  } catch {
+    // Mode démo sans base de données
+  }
 
   return (
     <div className="space-y-8">

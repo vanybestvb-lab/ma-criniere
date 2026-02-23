@@ -10,15 +10,20 @@ type Params = { params: Promise<{ id: string }> };
 
 export default async function AdminOrderDetailPage({ params }: Params) {
   const { id } = await params;
-  const order = await prisma.order.findUnique({
-    where: { id },
-    include: {
-      items: { include: { product: true, variant: true } },
-      events: { orderBy: { createdAt: "desc" } },
-      payments: true,
-      shipments: true,
-    },
-  });
+  let order: Awaited<ReturnType<typeof prisma.order.findUnique>> = null;
+  try {
+    order = await prisma.order.findUnique({
+      where: { id },
+      include: {
+        items: { include: { product: true, variant: true } },
+        events: { orderBy: { createdAt: "desc" } },
+        payments: true,
+        shipments: true,
+      },
+    });
+  } catch {
+    // Mode démo sans base de données
+  }
 
   if (!order) notFound();
 
