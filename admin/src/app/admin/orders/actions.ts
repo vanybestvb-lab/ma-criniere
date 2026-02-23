@@ -1,19 +1,20 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 
-export async function confirmOrderPayment(formData: FormData) {
+export async function confirmOrderPayment(formData: FormData): Promise<void> {
   const orderId = formData.get("orderId");
   if (typeof orderId !== "string" || !orderId) {
-    return { ok: false, error: "orderId requis" };
+    redirect("/admin/orders?error=orderId_requis");
   }
   const order = await prisma.order.findUnique({
     where: { id: orderId },
     include: { payments: true },
   });
   if (!order || order.status !== "PENDING") {
-    return { ok: false, error: "Commande introuvable ou déjà traitée" };
+    redirect(`/admin/orders/${orderId}?error=commande_invalide`);
   }
 
   await prisma.$transaction(async (tx) => {
@@ -39,5 +40,4 @@ export async function confirmOrderPayment(formData: FormData) {
 
   revalidatePath("/admin/orders");
   revalidatePath(`/admin/orders/${orderId}`);
-  return { ok: true };
 }
