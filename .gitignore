@@ -19,7 +19,14 @@ npm-debug.log*
 # .env
 # dist/
 
+# Dependencies & build (ne jamais commiter)
+node_modules/
+.next/
+dist/
+.env
+.env.local
+.env.*.local
+
 # SQLite (admin)
 admin/prisma/*.db
 admin/prisma/*.db-journal
-node_modules
