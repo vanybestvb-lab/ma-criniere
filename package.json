@@ -3,15 +3,23 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch",
+    "build": "next build",
+    "dev:site": "next dev -p 3000",
     "serve": "npx --yes serve . -p 3000",
     "dev": "npm run dev --prefix admin",
     "db:generate": "npm run db:generate --prefix admin",
     "db:push": "npm run db:push --prefix admin",
     "db:seed": "npm run db:seed --prefix admin"
   },
+  "dependencies": {
+    "next": "14.2.18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
   "devDependencies": {
-    "typescript": "^5.3.0"
+    "@types/node": "^22.9.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "typescript": "^5.6.3"
   }
 }
