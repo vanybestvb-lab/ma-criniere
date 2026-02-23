@@ -1,5 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { startOfDay, subDays } from "date-fns";
+import { isDemoModeEnabled } from "@/mocks";
+import {
+  mockDashboardKpis,
+  mockTopProducts,
+  mockOrdersByStatus,
+  mockRecentOrders,
+  getMockRevenueByDay,
+} from "@/mocks";
 
 export interface DashboardKpis {
   revenueToday: number;
@@ -71,6 +79,7 @@ export async function getDashboardKpis(): Promise<DashboardKpis> {
     criticalStockCount: countWithCritical,
     };
   } catch {
+    if (isDemoModeEnabled()) return mockDashboardKpis;
     return emptyKpis;
   }
 }
@@ -93,6 +102,7 @@ export async function getTopProducts(limit: number = 5): Promise<TopProduct[]> {
     .sort((a, b) => b.revenue - a.revenue)
     .slice(0, limit);
   } catch {
+    if (isDemoModeEnabled()) return mockTopProducts.slice(0, limit);
     return [];
   }
 }
@@ -105,6 +115,7 @@ export async function getOrdersByStatus(): Promise<{ status: string; count: numb
   });
   return groups.map((g) => ({ status: g.status, count: g._count.id }));
   } catch {
+    if (isDemoModeEnabled()) return mockOrdersByStatus;
     return [];
   }
 }
@@ -125,6 +136,7 @@ export async function getRecentOrders(limit: number = 10) {
     },
   });
   } catch {
+    if (isDemoModeEnabled()) return mockRecentOrders.slice(0, limit);
     return [];
   }
 }
@@ -147,6 +159,7 @@ export async function getRevenueByDay(days: number = 14) {
   }
   return Array.from(byDay.entries()).map(([date, revenue]) => ({ date, revenue }));
   } catch {
+    if (isDemoModeEnabled()) return getMockRevenueByDay(days);
     return [];
   }
 }

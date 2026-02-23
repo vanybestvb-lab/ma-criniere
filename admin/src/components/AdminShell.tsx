@@ -33,6 +33,13 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             Ma Crinière Admin
           </Link>
         </div>
+        {process.env.NEXT_PUBLIC_DEMO_MODE === "true" && (
+          <div className="border-b border-amber-200 bg-amber-50 px-4 py-2">
+            <span className="inline-flex items-center rounded-full bg-amber-400 px-2.5 py-0.5 text-xs font-semibold text-amber-900">
+              DEMO MODE
+            </span>
+          </div>
+        )}
         <nav className="space-y-0.5 p-3">
           {nav.map((item) => (
             <Link

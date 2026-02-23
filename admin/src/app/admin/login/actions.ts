@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import * as bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { isDatabaseAvailable } from "@/lib/prisma";
+import { isDemoModeEnabled, DEMO_EMAIL, DEMO_PASSWORD } from "@/mocks";
 
 export async function loginAction(formData: FormData) {
   const email = formData.get("email");
@@ -13,6 +14,21 @@ export async function loginAction(formData: FormData) {
 
   if (typeof email !== "string" || typeof password !== "string") {
     redirect("/admin/login?error=missing");
+  }
+
+  if (isDemoModeEnabled()) {
+    if (email.trim().toLowerCase() !== DEMO_EMAIL || password !== DEMO_PASSWORD) {
+      redirect("/admin/login?error=invalid");
+    }
+    const cookieStore = await cookies();
+    cookieStore.set("demo_auth", "true", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24,
+      path: "/",
+    });
+    redirect(typeof redirectTo === "string" ? redirectTo : "/admin/dashboard");
   }
 
   const dbOk = await isDatabaseAvailable();

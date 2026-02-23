@@ -10,7 +10,8 @@ export function middleware(request: NextRequest) {
   if (path.startsWith("/admin")) {
     const session = request.cookies.get("admin_session");
     const demo = request.cookies.get("admin_demo");
-    if (!session?.value && !demo?.value) {
+    const demoAuth = request.cookies.get("demo_auth");
+    if (!session?.value && !demo?.value && !demoAuth?.value) {
       const login = new URL(ADMIN_LOGIN, request.url);
       login.searchParams.set("from", path);
       return NextResponse.redirect(login);
