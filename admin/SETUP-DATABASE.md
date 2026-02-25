@@ -2,6 +2,26 @@
 
 Tu peux utiliser **Neon** (PostgreSQL en ligne, gratuit) sans rien installer.
 
+---
+
+## Admin déployé sur Vercel (production)
+
+Sur Vercel, **SQLite ne fonctionne pas** (pas de fichier persistant). Il faut une **base PostgreSQL en ligne** (Neon ou Supabase).
+
+1. **Créer une base Neon** (voir Option 1 ci‑dessous) et récupérer l’URL de connexion.
+2. **Dans le projet Vercel** (celui qui déploie l’admin) :
+   - **Settings** → **Environment Variables**
+   - Ajoute **`DATABASE_URL`** avec l’URL Neon (ex. `postgresql://...?sslmode=require`)
+   - Choisis l’environnement **Production** (et Preview si besoin).
+3. **Créer les tables et le compte admin** sur cette base (une seule fois) :
+   - En local : mets la **même** `DATABASE_URL` dans **`admin/.env`**.
+   - Le schéma Prisma doit être en **PostgreSQL** pour Neon (voir ci‑dessous si tu es en SQLite).
+   - Dans **`admin/`** : `npm run db:push` puis `npm run db:seed`.
+4. **Redéploie** le projet sur Vercel (ou attends le prochain déploiement).  
+   La page de connexion admin pourra alors se connecter à la base et le message « Base de données inaccessible » disparaîtra.
+
+Le schéma Prisma est en **PostgreSQL** : utilise une `DATABASE_URL` au format `postgresql://...` (Neon, Supabase ou Postgres local).
+
 ## Option 1 : Neon (recommandé, ~2 min)
 
 1. **Créer un compte**  

@@ -26,9 +26,24 @@ export default async function AdminLoginPage({ searchParams }: SearchParams) {
         )}
         {showDbError ? (
           <div className="mb-4 space-y-3">
-            <p className="text-sm text-amber-800">
-              Aucune base de données configurée. Tu peux parcourir le back-office en mode démo (sans données).
+            <p className="text-sm font-medium text-amber-900">
+              Base de données inaccessible.
             </p>
+            <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
+              <p className="mb-2 font-medium">En dev (SQLite)</p>
+              <p className="mb-2">
+                Vérifie que <code className="rounded bg-amber-100 px-1">admin/.env</code> contient{" "}
+                <code className="rounded bg-amber-100 px-1">DATABASE_URL=&quot;file:./prisma/dev.db&quot;</code>, puis lance dans{" "}
+                <code className="rounded bg-amber-100 px-1">admin/</code> :{" "}
+                <code className="rounded bg-amber-100 px-1">npm run db:push</code> et{" "}
+                <code className="rounded bg-amber-100 px-1">npm run db:seed</code>.
+              </p>
+              <p className="mt-2 font-medium">Base en ligne (Vercel, production)</p>
+              <p>
+                Configure une base PostgreSQL (Neon, Supabase…) et <code className="rounded bg-amber-100 px-1">DATABASE_URL</code> dans les variables d’environnement du projet. Voir{" "}
+                <code className="rounded bg-amber-100 px-1">admin/SETUP-DATABASE.md</code>.
+              </p>
+            </div>
             <form action={demoModeAction}>
               <button
                 type="submit"
