@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { CartBadge } from "@/components/CartBadge";
 
-const IMG = "/Images Sites Macrinère";
+const IMG = "/images";
 
 export function Header() {
   return (

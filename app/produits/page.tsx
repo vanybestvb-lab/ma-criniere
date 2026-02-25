@@ -65,7 +65,7 @@ export default async function ProduitsPage() {
                     <Link
                       href={`/produits/${p.slug}`}
                       className="product-image"
-                      style={{ background: `url('/Images Sites Macrinère/${p.img}') center/cover` }}
+                      style={{ background: `url('/images/${p.img}') center/cover` }}
                     />
                     <div className="product-info">
                       <h3 className="product-name">

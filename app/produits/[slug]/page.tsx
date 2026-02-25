@@ -69,7 +69,7 @@ export default async function ProductPage({ params }: Props) {
             <div className="product-page-gallery">
               <div
                 className="product-page-main-image"
-                style={{ background: `url('/Images Sites Macrinère/${fallback.img}') center/cover` }}
+                style={{ background: `url('/images/${fallback.img}') center/cover` }}
               />
             </div>
             <div className="product-page-main">
@@ -84,7 +84,7 @@ export default async function ProductPage({ params }: Props) {
                   productId={slug}
                   name={fallback.name}
                   price={fallback.price}
-                  image={`/Images Sites Macrinère/${fallback.img}`}
+                  image={`/images/${fallback.img}`}
                   className="btn btn-violet"
                 />
               </div>

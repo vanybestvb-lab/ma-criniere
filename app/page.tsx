@@ -39,7 +39,7 @@ export default function HomePage() {
               { slug: "soins-solaires", name: "Soins Solaires", tag: "PROTECTION", price: "255", img: "Produit 4.jpg" },
             ].map((p) => (
               <article key={p.slug} className="product-card product-card--elegant">
-                <Link href={`/produits/${p.slug}`} className="product-image" style={{ background: `url('/Images Sites Macrinère/${p.img}') center/cover` }} />
+                <Link href={`/produits/${p.slug}`} className="product-image" style={{ background: `url('/images/${p.img}') center/cover` }} />
                 <div className="product-info">
                   <h3 className="product-name"><Link href={`/produits/${p.slug}`}>{p.name}</Link></h3>
                   <p className="product-tag">{p.tag}</p>

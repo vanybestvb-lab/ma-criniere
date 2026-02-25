@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-const IMG = "/Images Sites Macrinère";
+const IMG = "/images";
 
 export function Footer() {
   return (
