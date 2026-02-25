@@ -85,21 +85,21 @@ export default async function AdminOrderDetailPage({ params }: Params) {
           <ul className="space-y-1 text-sm">
             <li className="flex justify-between">
               <span className="text-gray-600">Sous-total</span>
-              <span>{Number(order.subtotal).toFixed(2)} €</span>
+              <span>{Number(order.subtotal).toFixed(2)} $</span>
             </li>
             <li className="flex justify-between">
               <span className="text-gray-600">Livraison</span>
-              <span>{Number(order.shippingCost).toFixed(2)} €</span>
+              <span>{Number(order.shippingCost).toFixed(2)} $</span>
             </li>
             {Number(order.discount) > 0 && (
               <li className="flex justify-between text-green-600">
                 <span>Remise</span>
-                <span>-{Number(order.discount).toFixed(2)} €</span>
+                <span>-{Number(order.discount).toFixed(2)} $</span>
               </li>
             )}
             <li className="flex justify-between border-t border-gray-100 pt-2 font-medium">
               <span>Total</span>
-              <span>{Number(order.total).toFixed(2)} €</span>
+              <span>{Number(order.total).toFixed(2)} $</span>
             </li>
           </ul>
         </div>
@@ -124,9 +124,9 @@ export default async function AdminOrderDetailPage({ params }: Params) {
               <tr key={item.id} className="border-t border-gray-100">
                 <td className="px-4 py-2 font-medium">{item.name}</td>
                 <td className="px-4 py-2 text-gray-500">{item.sku ?? "—"}</td>
-                <td className="px-4 py-2 text-right">{Number(item.price).toFixed(2)} €</td>
+                <td className="px-4 py-2 text-right">{Number(item.price).toFixed(2)} $</td>
                 <td className="px-4 py-2 text-right">{item.quantity}</td>
-                <td className="px-4 py-2 text-right">{Number(item.subtotal).toFixed(2)} €</td>
+                <td className="px-4 py-2 text-right">{Number(item.subtotal).toFixed(2)} $</td>
               </tr>
             ))}
           </tbody>
@@ -158,7 +158,7 @@ export default async function AdminOrderDetailPage({ params }: Params) {
           <ul className="space-y-1 text-sm">
             {order.payments.map((p) => (
               <li key={p.id} className="flex justify-between">
-                <span>{p.method} — {Number(p.amount).toFixed(2)} €</span>
+                <span>{p.method} — {Number(p.amount).toFixed(2)} $</span>
                 <span className={p.status === "SUCCESS" ? "text-green-600" : "text-gray-500"}>
                   {p.status}
                 </span>

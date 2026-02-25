@@ -48,7 +48,7 @@ export default async function AdminOrdersPage() {
                   <td className="px-4 py-3">
                     {o.firstName} {o.lastName}
                   </td>
-                  <td className="px-4 py-3">{Number(o.total).toFixed(2)} €</td>
+                  <td className="px-4 py-3">{Number(o.total).toFixed(2)} $</td>
                   <td className="px-4 py-3">
                     <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium">
                       {o.status}

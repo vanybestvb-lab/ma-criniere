@@ -2,6 +2,9 @@
   "name": "ma-criniere-admin",
   "version": "1.0.0",
   "private": true,
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "scripts": {
     "dev": "node node_modules/next/dist/bin/next dev -p 3001",
     "build": "next build",

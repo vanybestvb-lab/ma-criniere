@@ -38,7 +38,7 @@ export function DashboardChart({ revenueByDay, ordersByStatus }: DashboardChartP
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" tick={{ fontSize: 10 }} />
               <YAxis tick={{ fontSize: 10 }} />
-              <Tooltip formatter={(v: number) => [`${Number(v).toFixed(2)} €`, "CA"]} />
+              <Tooltip formatter={(v: number) => [`${Number(v).toFixed(2)} $`, "CA"]} />
               <Line type="monotone" dataKey="revenue" stroke="#81557A" strokeWidth={2} />
             </LineChart>
           </ResponsiveContainer>

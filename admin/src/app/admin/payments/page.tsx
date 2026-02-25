@@ -39,7 +39,7 @@ export default async function AdminPaymentsPage() {
               payments.map((p) => (
                 <tr key={p.id} className="border-t border-gray-100 hover:bg-gray-50">
                   <td className="px-4 py-3 font-medium">{p.order.orderNumber}</td>
-                  <td className="px-4 py-3">{Number(p.amount).toFixed(2)} €</td>
+                  <td className="px-4 py-3">{Number(p.amount).toFixed(2)} $</td>
                   <td className="px-4 py-3">
                     <span
                       className={

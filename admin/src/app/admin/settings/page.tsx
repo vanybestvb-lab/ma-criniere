@@ -38,7 +38,7 @@ export default async function AdminSettingsPage() {
                   <tr key={z.id} className="border-b">
                     <td className="py-2 pr-4 font-mono">{z.code}</td>
                     <td className="py-2 pr-4">{z.name}</td>
-                    <td className="py-2 pr-4">{Number(z.price).toFixed(2)} €</td>
+                    <td className="py-2 pr-4">{Number(z.price).toFixed(2)} $</td>
                     <td className="py-2">{z.delay ?? "—"}</td>
                   </tr>
                 ))

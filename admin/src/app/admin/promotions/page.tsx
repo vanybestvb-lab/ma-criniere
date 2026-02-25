@@ -40,7 +40,7 @@ export default async function AdminPromotionsPage() {
                   <td className="px-4 py-3 font-mono font-medium">{c.code}</td>
                   <td className="px-4 py-3">{c.type}</td>
                   <td className="px-4 py-3">
-                    {c.type === "PERCENT" ? `${c.value} %` : `${c.value} €`}
+                    {c.type === "PERCENT" ? `${c.value} %` : `${c.value} $`}
                   </td>
                   <td className="px-4 py-3">
                     {c.usedCount}

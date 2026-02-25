@@ -7,7 +7,9 @@ import {
   getOrdersByStatus,
   getRecentOrders,
   getRevenueByDay,
+  type DashboardPeriod,
 } from "@/services/dashboard.service";
+import { DashboardPeriodFilter } from "@/components/DashboardPeriodFilter";
 
 const DashboardChart = nextDynamic(
   () => import("@/components/Charts/DashboardChart").then((m) => m.DashboardChart),
@@ -16,33 +18,55 @@ const DashboardChart = nextDynamic(
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminDashboardPage() {
+function parsePeriod(p: { from?: string; to?: string }): DashboardPeriod | undefined {
+  const from = p.from;
+  const to = p.to;
+  if (!from || !to) return undefined;
+  const dateFrom = new Date(from);
+  const dateTo = new Date(to);
+  if (Number.isNaN(dateFrom.getTime()) || Number.isNaN(dateTo.getTime())) return undefined;
+  if (dateFrom > dateTo) return undefined;
+  return { dateFrom, dateTo };
+}
+
+type Props = { searchParams: { from?: string; to?: string } | Promise<{ from?: string; to?: string }> };
+
+export default async function AdminDashboardPage({ searchParams }: Props) {
+  const params = await Promise.resolve(searchParams);
+  const period = parsePeriod(params);
   const cookieStore = await cookies();
   const useDemoData = !!(
     cookieStore.get("admin_demo")?.value ||
     cookieStore.get("demo_auth")?.value
   );
   const [kpis, topProducts, ordersByStatus, recentOrders, revenueByDay] = await Promise.all([
-    getDashboardKpis(useDemoData),
-    getTopProducts(5, useDemoData),
-    getOrdersByStatus(useDemoData),
-    getRecentOrders(10, useDemoData),
-    getRevenueByDay(14, useDemoData),
+    getDashboardKpis(useDemoData, period),
+    getTopProducts(5, useDemoData, period),
+    getOrdersByStatus(useDemoData, period),
+    getRecentOrders(10, useDemoData, period),
+    getRevenueByDay(period ? 365 : 14, useDemoData, period),
   ]);
 
+  const periodSub = period
+    ? `${period.dateFrom.toLocaleDateString("fr-FR")} - ${period.dateTo.toLocaleDateString("fr-FR")}`
+    : null;
   const kpiCards = [
-    { label: "CA Aujourd'hui", value: `${kpis.revenueToday.toFixed(2)} €`, sub: "Today" },
-    { label: "CA 7 jours", value: `${kpis.revenue7d.toFixed(2)} €`, sub: "7 derniers jours" },
-    { label: "CA 30 jours", value: `${kpis.revenue30d.toFixed(2)} €`, sub: "30 derniers jours" },
-    { label: "Total commandes", value: String(kpis.totalOrders), sub: "Toutes périodes" },
+    { label: "CA Aujourd'hui", value: `${kpis.revenueToday.toFixed(2)} $`, sub: period ? periodSub : "Today" },
+    { label: "CA 7 jours", value: `${kpis.revenue7d.toFixed(2)} $`, sub: period ? periodSub : "7 derniers jours" },
+    { label: "CA 30 jours", value: `${kpis.revenue30d.toFixed(2)} $`, sub: period ? periodSub : "30 derniers jours" },
+    { label: "Total commandes", value: String(kpis.totalOrders), sub: period ? periodSub : "Toutes périodes" },
     { label: "En attente", value: String(kpis.pendingOrders), sub: "À traiter" },
-    { label: "Panier moyen", value: `${kpis.averageOrderValue.toFixed(2)} €`, sub: "Moyenne" },
+    { label: "Panier moyen", value: `${kpis.averageOrderValue.toFixed(2)} $`, sub: "Moyenne" },
     { label: "Stock critique", value: String(kpis.criticalStockCount), sub: "Alertes" },
   ];
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+      </div>
+
+      <DashboardPeriodFilter />
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
         {kpiCards.map((card) => (
@@ -71,7 +95,7 @@ export default async function AdminDashboardPage() {
                   <span>
                     {i + 1}. {p.name}
                   </span>
-                  <span className="font-medium">{p.quantity} vendus · {p.revenue.toFixed(2)} €</span>
+                  <span className="font-medium">{p.quantity} vendus · {p.revenue.toFixed(2)} $</span>
                 </li>
               ))
             )}
@@ -116,7 +140,7 @@ export default async function AdminDashboardPage() {
                       <td className="py-2 pr-2">
                         {o.firstName} {o.lastName}
                       </td>
-                      <td className="py-2 pr-2">{Number(o.total).toFixed(2)} €</td>
+                      <td className="py-2 pr-2">{Number(o.total).toFixed(2)} $</td>
                       <td className="py-2">
                         <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium">
                           {o.status}

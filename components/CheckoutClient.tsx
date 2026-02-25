@@ -5,7 +5,9 @@ import Link from "next/link";
 import { getCartItems, getCartTotal, clearCart } from "@/lib/cart";
 import { createOrder, type ShippingOption, type OrderItem, type Customer } from "@/lib/orders";
 
-const SHIPPING_OPTIONS: ShippingOption[] = [
+const API_BASE = typeof process.env.NEXT_PUBLIC_ADMIN_API_URL === "string" ? process.env.NEXT_PUBLIC_ADMIN_API_URL.trim() : "";
+
+const FALLBACK_SHIPPING_OPTIONS: ShippingOption[] = [
   { id: "express-24", label: "Livraison express 24h (70 km)", price: 15, delay: "24h" },
   { id: "express-48", label: "Livraison express 48h", price: 10, delay: "48h" },
   { id: "standard", label: "Livraison standard", price: 5, delay: "48-72h" },
@@ -19,9 +21,12 @@ export function CheckoutClient() {
   const [step, setStep] = useState(1);
   const [items, setItems] = useState<OrderItem[]>([]);
   const [subtotal, setSubtotal] = useState(0);
-  const [shipping, setShipping] = useState<ShippingOption>(SHIPPING_OPTIONS[0]);
+  const [shippingOptions, setShippingOptions] = useState<ShippingOption[]>(FALLBACK_SHIPPING_OPTIONS);
+  const [shipping, setShipping] = useState<ShippingOption>(FALLBACK_SHIPPING_OPTIONS[0]);
   const [payment, setPayment] = useState("mobile_money");
   const [orderId, setOrderId] = useState<string | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [customer, setCustomer] = useState<Customer>({
     firstName: "",
     lastName: "",
@@ -39,6 +44,19 @@ export function CheckoutClient() {
     const tot = getCartTotal();
     setItems(cartItems.map((i) => ({ ...i })));
     setSubtotal(tot);
+  }, []);
+
+  useEffect(() => {
+    if (!API_BASE) return;
+    fetch(`${API_BASE}/api/shipping-options`)
+      .then((res) => res.ok ? res.json() : Promise.reject(new Error("Erreur réseau")))
+      .then((opts: Array<{ id: string; label: string; price: number; delay: string }>) => {
+        if (Array.isArray(opts) && opts.length > 0) {
+          setShippingOptions(opts);
+          setShipping(opts[0]);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   const isEmpty = items.length === 0;
@@ -70,16 +88,60 @@ export function CheckoutClient() {
     return true;
   };
 
-  const handleConfirmOrder = () => {
+  const handleConfirmOrder = async () => {
     if (!customer.email) {
       setStep(2);
       return;
     }
+    setSubmitError(null);
+    setIsSubmitting(true);
     const orderItems = toOrderItems();
-    const order = createOrder(customer, orderItems, shipping, payment);
-    clearCart();
-    setOrderId(order.id);
-    setStep(5);
+
+    if (API_BASE) {
+      try {
+        const res = await fetch(`${API_BASE}/api/orders`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            customer: {
+              firstName: customer.firstName,
+              lastName: customer.lastName,
+              email: customer.email,
+              phone: customer.phone || undefined,
+              address: customer.address || undefined,
+            },
+            items: orderItems.map((i) => ({
+              productId: i.productId,
+              name: i.name,
+              price: i.price,
+              quantity: i.quantity,
+              subtotal: i.subtotal,
+            })),
+            shippingOptionCode: shipping.id,
+            paymentMethod: payment,
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          setSubmitError(data.error || "Impossible d’enregistrer la commande.");
+          setIsSubmitting(false);
+          return;
+        }
+        clearCart();
+        setOrderId(data.orderNumber ?? data.orderId ?? "OK");
+        setStep(5);
+      } catch {
+        setSubmitError("Erreur de connexion. Réessayez ou passez commande hors ligne.");
+        setIsSubmitting(false);
+        return;
+      }
+    } else {
+      const order = createOrder(customer, orderItems, shipping, payment);
+      clearCart();
+      setOrderId(order.id);
+      setStep(5);
+    }
+    setIsSubmitting(false);
   };
 
   if (isEmpty && step < 5) {
@@ -195,7 +257,7 @@ export function CheckoutClient() {
             <div className="checkout-panel active">
               <h3 className="checkout-panel-title">Choisissez une option de livraison</h3>
               <div className="shipping-options">
-                {SHIPPING_OPTIONS.map((opt) => (
+                {shippingOptions.map((opt) => (
                   <label
                     key={opt.id}
                     className={`shipping-option ${shipping.id === opt.id ? "selected" : ""}`}
@@ -243,10 +305,11 @@ export function CheckoutClient() {
                 <p>Livraison : <strong data-summary-shipping>{formatPrice(shippingCost)}</strong></p>
                 <p>Total : <strong data-summary-total>{formatPrice(total)}</strong></p>
               </div>
+              {submitError && <p className="checkout-error" style={{ color: "var(--error, #c00)", marginBottom: "1rem" }}>{submitError}</p>}
               <div className="checkout-actions">
-                <button type="button" className="btn btn-hero-maskin" onClick={() => setStep(3)}>← Précédent</button>
-                <button type="button" className="btn btn-violet btn-submit" onClick={handleConfirmOrder}>
-                  Confirmer la commande
+                <button type="button" className="btn btn-hero-maskin" onClick={() => setStep(3)} disabled={isSubmitting}>← Précédent</button>
+                <button type="button" className="btn btn-violet btn-submit" onClick={handleConfirmOrder} disabled={isSubmitting}>
+                  {isSubmitting ? "Envoi en cours…" : "Confirmer la commande"}
                 </button>
               </div>
             </div>

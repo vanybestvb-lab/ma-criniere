@@ -18,11 +18,11 @@ export default async function AdminReportsPage() {
         <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
           <li className="rounded-lg bg-gray-50 p-3">
             <span className="text-sm text-gray-500">CA 30 jours</span>
-            <p className="text-xl font-semibold">{kpis.revenue30d.toFixed(2)} €</p>
+            <p className="text-xl font-semibold">{kpis.revenue30d.toFixed(2)} $</p>
           </li>
           <li className="rounded-lg bg-gray-50 p-3">
             <span className="text-sm text-gray-500">Panier moyen</span>
-            <p className="text-xl font-semibold">{kpis.averageOrderValue.toFixed(2)} €</p>
+            <p className="text-xl font-semibold">{kpis.averageOrderValue.toFixed(2)} $</p>
           </li>
           <li className="rounded-lg bg-gray-50 p-3">
             <span className="text-sm text-gray-500">Total commandes</span>
@@ -58,7 +58,7 @@ export default async function AdminReportsPage() {
                   <tr key={p.name} className="border-b">
                     <td className="py-2 pr-4 font-medium">{p.name}</td>
                     <td className="py-2 pr-4">{p.quantity}</td>
-                    <td className="py-2">{p.revenue.toFixed(2)} €</td>
+                    <td className="py-2">{p.revenue.toFixed(2)} $</td>
                   </tr>
                 ))
               )}

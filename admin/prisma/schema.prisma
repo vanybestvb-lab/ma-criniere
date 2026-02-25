@@ -74,6 +74,8 @@ model Product {
   categoryId      String?   @map("category_id")
   category        Category? @relation(fields: [categoryId], references: [id])
   tag             String?
+  price           Float?    // Prix principal pour storefront (variants gardent prix détaillé)
+  currency        String?   @default("USD")
   active          Boolean   @default(true)
   sortOrder       Int       @default(0) @map("sort_order")
   createdAt       DateTime  @default(now()) @map("created_at")
@@ -138,12 +140,13 @@ model ProductRecommendation {
 
 // ============ INVENTORY ============
 model InventoryLevel {
-  id           String   @id @default(cuid())
-  productId    String   @unique @map("product_id")
-  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
-  quantity     Int      @default(0)
-  alertThreshold Int    @default(5) @map("alert_threshold")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id               String   @id @default(cuid())
+  productId        String   @unique @map("product_id")
+  product          Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity         Int      @default(0)  // stockOnHand
+  stockReserved    Int      @default(0)  @map("stock_reserved")
+  alertThreshold   Int      @default(5)  @map("alert_threshold") // lowStockThreshold
+  updatedAt        DateTime @updatedAt @map("updated_at")
 
   @@index([quantity])
 }
@@ -194,7 +197,7 @@ model Order {
   shippingCost    Float      @map("shipping_cost")
   discount        Float      @default(0)
   total           Float
-  currency        String      @default("EUR")
+  currency        String      @default("USD")
   notes           String?
   createdAt       DateTime    @default(now()) @map("created_at")
   updatedAt       DateTime    @updatedAt @map("updated_at")
@@ -244,7 +247,7 @@ model Payment {
   orderId      String   @map("order_id")
   order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   amount       Float
-  currency     String   @default("EUR")
+  currency     String   @default("USD")
   status       String   @default("PENDING") // PENDING, SUCCESS, FAILED, REFUNDED
   method        String        // mobile_money, carte, livraison
   externalId    String?       @map("external_id")
@@ -274,8 +277,9 @@ model Shipment {
   id             String   @id @default(cuid())
   orderId        String   @map("order_id")
   order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  trackingNumber String?  @map("tracking_number")
+  trackingNumber String?  @map("tracking_number") // trackingCode
   status         String   // PENDING, PICKED, IN_TRANSIT, DELIVERED
+  address        String?
   carrier        String?
   shippedAt      DateTime? @map("shipped_at")
   deliveredAt    DateTime? @map("delivered_at")

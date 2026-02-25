@@ -2,6 +2,9 @@
   "name": "ma-criniere",
   "version": "1.0.0",
   "private": true,
+  "prisma": {
+    "schema": "admin/prisma/schema.prisma"
+  },
   "scripts": {
     "build": "next build",
     "dev:site": "next dev -p 3000",

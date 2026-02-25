@@ -1,18 +1,45 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { fetchBackendProducts } from "@/lib/backend-api";
 
 export const dynamic = "force-dynamic";
 
+interface BackendProduct {
+  id: string;
+  name: string;
+  slug: string;
+  price?: number | null;
+  active: boolean;
+  category?: { name: string } | null;
+  _count?: { variants?: number };
+  inventory?: Array<{ quantity: number; alertThreshold: number }>;
+}
+
 export default async function AdminProductsPage() {
-  let products: Awaited<ReturnType<typeof prisma.product.findMany>> = [];
-  try {
-    products = await prisma.product.findMany({
-      take: 50,
-      orderBy: { createdAt: "desc" },
-      include: { category: true, _count: { select: { variants: true } } },
-    });
-  } catch {
-    // Mode démo sans base de données
+  const useBackend = !!process.env.BACKEND_URL;
+  let products: BackendProduct[] = [];
+
+  if (useBackend) {
+    products = (await fetchBackendProducts()) as BackendProduct[];
+  } else {
+    try {
+      const rows = await prisma.product.findMany({
+        take: 50,
+        orderBy: { createdAt: "desc" },
+        include: { category: true, _count: { select: { variants: true } } },
+      });
+      products = rows.map((p) => ({
+        id: p.id,
+        name: p.name,
+        slug: p.slug,
+        price: p.price,
+        active: p.active,
+        category: p.category,
+        _count: { variants: p._count.variants },
+      }));
+    } catch {
+      // Mode démo sans base de données
+    }
   }
 
   return (
@@ -33,7 +60,8 @@ export default async function AdminProductsPage() {
               <th className="px-4 py-3 text-left font-medium text-gray-700">Nom</th>
               <th className="px-4 py-3 text-left font-medium text-gray-700">Slug</th>
               <th className="px-4 py-3 text-left font-medium text-gray-700">Catégorie</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-700">Variantes</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-700">Prix</th>
+              <th className="px-4 py-3 text-left font-medium text-gray-700">Variantes / Stock</th>
               <th className="px-4 py-3 text-left font-medium text-gray-700">Actif</th>
               <th className="px-4 py-3 text-right font-medium text-gray-700">Actions</th>
             </tr>
@@ -41,7 +69,7 @@ export default async function AdminProductsPage() {
           <tbody>
             {products.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-gray-500">
+                <td colSpan={7} className="px-4 py-8 text-center text-gray-500">
                   Aucun produit
                 </td>
               </tr>
@@ -51,7 +79,14 @@ export default async function AdminProductsPage() {
                   <td className="px-4 py-3 font-medium">{p.name}</td>
                   <td className="px-4 py-3 text-gray-500">{p.slug}</td>
                   <td className="px-4 py-3">{p.category?.name ?? "—"}</td>
-                  <td className="px-4 py-3">{p._count.variants}</td>
+                  <td className="px-4 py-3">{p.price != null ? `${p.price} $` : "—"}</td>
+                  <td className="px-4 py-3">
+                    {p._count?.variants != null
+                      ? p._count.variants
+                      : p.inventory?.[0]
+                        ? `Stock: ${p.inventory[0].quantity}`
+                        : "—"}
+                  </td>
                   <td className="px-4 py-3">
                     {p.active ? (
                       <span className="text-green-600">Oui</span>
