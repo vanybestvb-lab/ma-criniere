@@ -33,6 +33,12 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: npx prisma generate --schema=prisma/schema.postgresql.prisma
 
+      - name: Apply migrations (tables)
+        working-directory: admin
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npx prisma migrate deploy --schema=prisma/schema.postgresql.prisma
+
       - name: Seed database
         working-directory: admin
         env:
