@@ -3,14 +3,16 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
+const customersQuery = {
+  take: 50,
+  orderBy: { createdAt: "desc" as const },
+  include: { _count: { select: { orders: true } } },
+};
+
 export default async function AdminCustomersPage() {
-  let customers: Awaited<ReturnType<typeof prisma.customer.findMany>> = [];
+  let customers: Awaited<ReturnType<typeof prisma.customer.findMany<typeof customersQuery>>> = [];
   try {
-    customers = await prisma.customer.findMany({
-      take: 50,
-      orderBy: { createdAt: "desc" },
-      include: { _count: { select: { orders: true } } },
-    });
+    customers = await prisma.customer.findMany(customersQuery);
   } catch {
     // Mode démo sans base de données
   }

@@ -17,8 +17,8 @@ Back-office Next.js 14 (App Router) pour gérer commandes, produits, stock, clie
 
 ## Base de données
 
-- **Dev local** : par défaut `admin/.env` utilise SQLite (`DATABASE_URL="file:./prisma/dev.db"`). Après `npm install`, lancer `npm run db:push` puis `npm run db:seed`.
-- **Production (Vercel)** : PostgreSQL obligatoire. Voir **[SETUP-DATABASE.md](./SETUP-DATABASE.md)** et **[.env.production.example](./.env.production.example)**. Sur Vercel, le build utilise `schema.postgresql.prisma` ; en base, exécuter `npm run db:migrate` puis `npm run db:seed` (avec `DATABASE_URL` PostgreSQL).
+- **Dev local** : par défaut `admin/.env` utilise SQLite (`DATABASE_URL="file:./dev.db"`). Après `npm install`, lancer `npm run db:push` puis `npm run db:seed` **depuis le dossier `admin/`**.
+- **Production (Vercel)** : PostgreSQL obligatoire. Voir **[SETUP-DATABASE.md](./SETUP-DATABASE.md)** et **[.env.production.example](./.env.production.example)**. Les migrations sont appliquées automatiquement au build ; une fois le 1er déploiement fait, exécuter **`npm run db:seed`** en local (avec la même `DATABASE_URL` Neon) pour créer le compte admin.
 
 ## Installation
 
@@ -33,9 +33,19 @@ npm run db:seed
 
 ## Démarrage
 
-- **Dev** : `npm run dev` (serveur sur http://localhost:3001)
+- **Dev** : depuis **`admin/`**, `npm run dev` (serveur sur http://localhost:3001)
 - **Build** : `npm run build`
 - **Prod** : `npm run start`
+
+## Déploiement Vercel
+
+1. **Projet Vercel** : importer le repo, définir le **Root Directory** sur **`admin`** (si le dépôt contient tout le monorepo).
+2. **Variables d’environnement** (Settings → Environment Variables) :
+   - **`DATABASE_URL`** : URL PostgreSQL (Neon, Supabase…), ex. `postgresql://...?sslmode=require`
+   - **`NEXTAUTH_SECRET`** : chaîne aléatoire sécurisée
+   - **`NEXTAUTH_URL`** : URL de l’app déployée, ex. `https://ton-projet.vercel.app`
+3. **Déployer** : le build exécute `prisma migrate deploy` (création/mise à jour des tables).
+4. **Une fois** : en local, avec la même `DATABASE_URL` dans `admin/.env`, lancer `npm run db:generate:prod` puis `npm run db:seed` pour créer le compte admin (admin@ma-criniere.com / admin123).
 
 ## Auth
 

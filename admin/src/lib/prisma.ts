@@ -25,10 +25,13 @@ function resolveDatabaseUrl(): string {
     return hasTimeout ? url : `${url}${separator}connect_timeout=30`;
   }
 
-  // SQLite (dev local)
+  // SQLite (dev local) : file:./dev.db (relatif au dossier prisma/) → cwd/prisma/dev.db (lancer npm run dev depuis admin/)
   if (url.startsWith("file:")) {
     const relativePath = url.replace(/^file:\.\/?/, "");
-    const absolutePath = path.resolve(process.cwd(), "prisma", relativePath);
+    const absolutePath =
+      relativePath === "dev.db" || relativePath === "prisma/dev.db"
+        ? path.resolve(process.cwd(), "prisma", "dev.db")
+        : path.resolve(process.cwd(), relativePath);
     if (process.env.NODE_ENV === "development" && !fs.existsSync(absolutePath)) {
       console.warn("[Prisma] Fichier DB introuvable:", absolutePath);
     }

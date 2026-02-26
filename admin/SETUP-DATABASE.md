@@ -11,16 +11,17 @@ Sur Vercel, **SQLite ne fonctionne pas** (pas de fichier persistant). Il faut un
 1. **Créer une base Neon** (voir Option 1 ci‑dessous) et récupérer l’URL de connexion.
 2. **Dans le projet Vercel** (celui qui déploie l’admin) :
    - **Settings** → **Environment Variables**
-   - Ajoute **`DATABASE_URL`** avec l’URL Neon (ex. `postgresql://...?sslmode=require`)
-   - Choisis l’environnement **Production** (et Preview si besoin).
-3. **Créer les tables et le compte admin** sur cette base (une seule fois) :
-   - En local : mets la **même** `DATABASE_URL` dans **`admin/.env`**.
-   - Le schéma Prisma doit être en **PostgreSQL** pour Neon (voir ci‑dessous si tu es en SQLite).
-   - Dans **`admin/`** : `npm run db:push` puis `npm run db:seed`.
-4. **Redéploie** le projet sur Vercel (ou attends le prochain déploiement).  
-   La page de connexion admin pourra alors se connecter à la base et le message « Base de données inaccessible » disparaîtra.
+   - Ajoute **`DATABASE_URL`** avec l’URL Neon (ex. `postgresql://...?sslmode=require`).
+   - Ajoute **`NEXTAUTH_SECRET`** (une chaîne aléatoire sécurisée) et **`NEXTAUTH_URL`** = l’URL de ton app (ex. `https://ton-admin.vercel.app`).
+   - Choisis l’environnement **Production** (et Preview si tu utilises des previews).
+3. **Premier déploiement** : lors du build, le script exécute automatiquement **`prisma migrate deploy`** (schéma PostgreSQL). Les tables sont créées sans action de ta part.
+4. **Créer le compte admin** (une seule fois après le 1er déploiement) :
+   - En local : mets la **même** `DATABASE_URL` (Neon) dans **`admin/.env`** (tu peux temporairement remplacer la ligne SQLite).
+   - Dans **`admin/`** : `npm run db:generate:prod` puis `npm run db:seed`.
+   - Remets ensuite `DATABASE_URL="file:./dev.db"` dans `admin/.env` si tu veux continuer en dev avec SQLite.
+5. **Redéploie** si besoin. La page de connexion admin pourra alors se connecter à la base et le message « Base de données inaccessible » disparaîtra.
 
-Le schéma Prisma est en **PostgreSQL** : utilise une `DATABASE_URL` au format `postgresql://...` (Neon, Supabase ou Postgres local).
+Le build Vercel utilise **`schema.postgresql.prisma`** : une `DATABASE_URL` au format `postgresql://...` (Neon, Supabase ou Postgres) est obligatoire en production.
 
 ## Option 1 : Neon (recommandé, ~2 min)
 
