@@ -2,14 +2,16 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
+const paymentsQuery = {
+  take: 50,
+  orderBy: { createdAt: "desc" as const },
+  include: { order: { select: { orderNumber: true } } },
+};
+
 export default async function AdminPaymentsPage() {
-  let payments: Awaited<ReturnType<typeof prisma.payment.findMany>> = [];
+  let payments: Awaited<ReturnType<typeof prisma.payment.findMany<typeof paymentsQuery>>> = [];
   try {
-    payments = await prisma.payment.findMany({
-      take: 50,
-      orderBy: { createdAt: "desc" },
-      include: { order: { select: { orderNumber: true } } },
-    });
+    payments = await prisma.payment.findMany(paymentsQuery);
   } catch {
     // Mode démo sans base de données
   }
@@ -38,7 +40,7 @@ export default async function AdminPaymentsPage() {
             ) : (
               payments.map((p) => (
                 <tr key={p.id} className="border-t border-gray-100 hover:bg-gray-50">
-                  <td className="px-4 py-3 font-medium">{p.order.orderNumber}</td>
+                  <td className="px-4 py-3 font-medium">{p.order?.orderNumber ?? "—"}</td>
                   <td className="px-4 py-3">{Number(p.amount).toFixed(2)} $</td>
                   <td className="px-4 py-3">
                     <span
