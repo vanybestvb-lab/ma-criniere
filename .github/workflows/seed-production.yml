@@ -1,0 +1,40 @@
+# Exécuter le seed une fois sur la base Neon (production).
+# Crée le compte admin@ma-criniere.com / admin123 sans rien lancer en local.
+#
+# 1. Dans GitHub : repo → Settings → Secrets and variables → Actions
+#    → New repository secret : Name = DATABASE_URL, Value = ton URL Neon (postgresql://...)
+# 2. Actions → "Seed production DB" → Run workflow
+
+name: Seed production DB
+
+on:
+  workflow_dispatch:
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: admin/package-lock.json
+
+      - name: Install (admin)
+        working-directory: admin
+        run: npm ci
+
+      - name: Generate Prisma (PostgreSQL)
+        working-directory: admin
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npx prisma generate --schema=prisma/schema.postgresql.prisma
+
+      - name: Seed database
+        working-directory: admin
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npm run db:seed
