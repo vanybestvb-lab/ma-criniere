@@ -17,11 +17,12 @@ export async function loginAction(formData: FormData) {
   }
 
   const cookieStore = await cookies();
-  cookieStore.set("demo_auth", "true", {
+  // Session "bypass" pour accéder au back-office avec les vraies données (DB), pas les mocks
+  cookieStore.set("admin_session", "bypass", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 60 * 60 * 24,
+    maxAge: 60 * 60 * 24 * 7,
     path: "/",
   });
 
