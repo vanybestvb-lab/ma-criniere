@@ -58,7 +58,7 @@ export async function getDashboardKpis(
     const day7 = subDays(today, 7);
     const day30 = subDays(today, 30);
 
-    const paidStatus = { in: ["PAID", "PREPARING", "SHIPPED", "DELIVERED"] as const };
+    const paidStatus = { in: ["PAID", "PREPARING", "SHIPPED", "DELIVERED"] as string[] };
 
     if (period) {
       const [revenueAgg, totalOrders, pendingOrders, avgOrder] = await Promise.all([
@@ -137,11 +137,8 @@ export async function getTopProducts(
   if (useDemoData || isDemoModeEnabled()) return mockTopProducts.slice(0, limit);
   try {
     const orderWhere = period
-      ? {
-          status: { in: ["PAID", "PREPARING", "SHIPPED", "DELIVERED"] as const },
-          ...orderDateFilter(period),
-        }
-      : { status: { in: ["PAID", "PREPARING", "SHIPPED", "DELIVERED"] as const } };
+      ? { status: { in: ["PAID", "PREPARING", "SHIPPED", "DELIVERED"] as string[] }, ...orderDateFilter(period) }
+      : { status: { in: ["PAID", "PREPARING", "SHIPPED", "DELIVERED"] as string[] } };
     const all = await prisma.orderItem.findMany({
       where: { order: orderWhere },
       select: { name: true, quantity: true, subtotal: true },
@@ -227,7 +224,7 @@ export async function getRevenueByDay(
       : { createdAt: { gte: subDays(startOfDay(new Date()), days) } };
     const orders = await prisma.order.findMany({
       where: {
-        status: { in: ["PAID", "PREPARING", "SHIPPED", "DELIVERED"] },
+        status: { in: ["PAID", "PREPARING", "SHIPPED", "DELIVERED"] as string[] },
         ...dateFilter,
       },
       select: { createdAt: true, total: true },
