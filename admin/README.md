@@ -5,7 +5,7 @@ Back-office Next.js 14 (App Router) pour gérer commandes, produits, stock, clie
 ## Stack
 
 - **Next.js 14** (App Router, Server Actions)
-- **Prisma** (PostgreSQL)
+- **Prisma** (SQLite en dev, PostgreSQL en production / Vercel)
 - **Tailwind CSS**
 - **TypeScript** (strict)
 - **Recharts** (graphiques), **Zod** (validation), **date-fns**, **bcryptjs** (auth)
@@ -13,13 +13,12 @@ Back-office Next.js 14 (App Router) pour gérer commandes, produits, stock, clie
 ## Prérequis
 
 - Node.js 18+
-- Une base PostgreSQL (locale ou en ligne)
+- **Dev** : rien de plus (SQLite par défaut). **Production (Vercel)** : base PostgreSQL (Neon, Supabase…).
 
-## Base de données (gratuit, sans install)
+## Base de données
 
-Pour une base **gratuite en ligne** (Neon ou Supabase), tout est détaillé ici :  
-**[SETUP-DATABASE.md](./SETUP-DATABASE.md)**  
-En résumé : inscription sur [Neon](https://console.neon.tech/signup) → copier l’URL de connexion → la coller dans `admin/.env` en `DATABASE_URL`.
+- **Dev local** : par défaut `admin/.env` utilise SQLite (`DATABASE_URL="file:./prisma/dev.db"`). Après `npm install`, lancer `npm run db:push` puis `npm run db:seed`.
+- **Production (Vercel)** : PostgreSQL obligatoire. Voir **[SETUP-DATABASE.md](./SETUP-DATABASE.md)** et **[.env.production.example](./.env.production.example)**. Sur Vercel, le build utilise `schema.postgresql.prisma` ; en base, exécuter `npm run db:migrate` puis `npm run db:seed` (avec `DATABASE_URL` PostgreSQL).
 
 ## Installation
 
@@ -27,8 +26,7 @@ En résumé : inscription sur [Neon](https://console.neon.tech/signup) → copie
 cd admin
 npm install
 cp .env.example .env
-# Mettre ta DATABASE_URL dans .env (voir SETUP-DATABASE.md)
-npm run db:generate
+# .env contient déjà SQLite pour le dev ; pour la prod voir SETUP-DATABASE.md
 npm run db:push
 npm run db:seed
 ```
@@ -52,8 +50,8 @@ Si `npm run db:generate` affiche **EPERM** ou « operation not permitted », voi
 ## Base de données
 
 - **Prisma Studio** : `npm run db:studio`
-- **Migrations** : `npm run db:migrate`
-- **Seed** : `npm run db:seed`
+- **Dev (SQLite)** : `npm run db:push`, `npm run db:seed`
+- **Prod (PostgreSQL)** : `npm run db:migrate` (applique les migrations), puis `npm run db:seed` si besoin
 
 ## Structure (résumé)
 
@@ -62,7 +60,7 @@ Si `npm run db:generate` affiche **EPERM** ou « operation not permitted », voi
 - `src/lib/` — Prisma, auth (rôles/permissions), audit
 - `src/services/` — dashboard.service
 - `src/components/` — PrintButton, AdminShell
-- `prisma/schema.prisma` — schéma complet (User RBAC, Order, Product, Payment, Shipment, Coupon, etc.)
+- `prisma/schema.prisma` — schéma SQLite (dev). `prisma/schema.postgresql.prisma` — même schéma pour PostgreSQL (prod / Vercel).
 
 ## Rôles (RBAC)
 

@@ -1,0 +1,350 @@
+// Ma Crinière — Back-Office Admin — Schéma PostgreSQL (production / Vercel)
+// Utilisé pour : build Vercel, db:migrate, db:push en prod.
+// Dev local : utiliser schema.prisma (SQLite).
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============ RBAC ============
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String    @map("password_hash")
+  name          String?
+  role          String    @default("SUPPORT") // SUPER_ADMIN, MANAGER, STOCK_MANAGER, SUPPORT, MARKETING, ACCOUNTANT
+  active        Boolean   @default(true)
+  lastLoginAt   DateTime? @map("last_login_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  auditLogs     AuditLog[] @relation("AuditLogActor")
+}
+
+// ============ AUDIT ============
+model AuditLog {
+  id         String   @id @default(cuid())
+  action     String
+  entity     String
+  entityId   String?  @map("entity_id")
+  payload    String?  // JSON string
+  actorId    String?  @map("actor_id")
+  actor      User?    @relation("AuditLogActor", fields: [actorId], references: [id])
+  ip         String?
+  userAgent  String?  @map("user_agent")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([entity, entityId])
+  @@index([actorId])
+  @@index([createdAt])
+}
+
+// ============ CATEGORIES ============
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  parentId    String?   @map("parent_id")
+  parent      Category? @relation("CategoryToCategory", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryToCategory")
+  products    Product[]
+  sortOrder   Int       @default(0) @map("sort_order")
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  @@index([slug])
+  @@index([parentId])
+}
+
+// ============ PRODUCTS ============
+model Product {
+  id              String    @id @default(cuid())
+  name            String
+  slug            String    @unique
+  descriptionShort String?  @map("description_short")
+  descriptionLong  String?  @map("description_long")
+  metaTitle       String?   @map("meta_title")
+  metaDescription String?   @map("meta_description")
+  categoryId      String?   @map("category_id")
+  category        Category? @relation(fields: [categoryId], references: [id])
+  tag             String?
+  price           Float?    // Prix principal pour storefront (variants gardent prix détaillé)
+  currency        String?   @default("USD")
+  active          Boolean   @default(true)
+  sortOrder       Int       @default(0) @map("sort_order")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  images          ProductImage[]
+  variants        ProductVariant[]
+  orderItems      OrderItem[]
+  inventory       InventoryLevel[]
+  recommended     ProductRecommendation[] @relation("RecommendedProduct")
+  recommendedBy   ProductRecommendation[] @relation("RecommendedBy")
+
+  @@index([slug])
+  @@index([categoryId])
+  @@index([active])
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  productId String   @map("product_id")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url       String
+  alt       String?
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([productId])
+}
+
+model ProductVariant {
+  id        String   @id @default(cuid())
+  productId String   @map("product_id")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  sku       String?  @unique
+  name      String?  // e.g. "Volume 250ml", "Parfum Lavande"
+  attributes String? // JSON string: { volume: "250ml", parfum: "lavande" }
+  price     Float
+  compareAtPrice Float?    @map("compare_at_price")
+  stock     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  inventoryMovements InventoryMovement[]
+  orderItems         OrderItem[]
+
+  @@index([productId])
+  @@index([sku])
+}
+
+model ProductRecommendation {
+  id                String   @id @default(cuid())
+  productId         String   @map("product_id")
+  product           Product  @relation("RecommendedBy", fields: [productId], references: [id], onDelete: Cascade)
+  recommendedId     String   @map("recommended_id")
+  recommended       Product  @relation("RecommendedProduct", fields: [recommendedId], references: [id], onDelete: Cascade)
+  sortOrder         Int      @default(0) @map("sort_order")
+
+  @@unique([productId, recommendedId])
+  @@index([productId])
+}
+
+// ============ INVENTORY ============
+model InventoryLevel {
+  id               String   @id @default(cuid())
+  productId        String   @unique @map("product_id")
+  product          Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity         Int      @default(0)  // stockOnHand
+  stockReserved    Int      @default(0)  @map("stock_reserved")
+  alertThreshold   Int      @default(5)  @map("alert_threshold") // lowStockThreshold
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  @@index([quantity])
+}
+
+model InventoryMovement {
+  id          String   @id @default(cuid())
+  variantId   String   @map("variant_id")
+  variant     ProductVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  type        String   // ADJUSTMENT, SALE, RETURN, RESTOCK
+  quantity    Int      // positive or negative
+  reason      String?
+  referenceId String?  @map("reference_id") // orderId if type SALE
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([variantId])
+  @@index([createdAt])
+}
+
+// ============ CUSTOMERS ============
+model Customer {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  firstName    String    @map("first_name")
+  lastName     String    @map("last_name")
+  phone        String?
+  address      String?
+  segment      String?   // VIP, INACTIF, etc.
+  internalNote String?   @map("internal_note")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+
+  orders Order[]
+}
+
+// ============ ORDERS ============
+model Order {
+  id              String   @id @default(cuid())
+  orderNumber     String   @unique @map("order_number")
+  customerId      String?  @map("customer_id")
+  customer        Customer? @relation(fields: [customerId], references: [id])
+  email           String
+  firstName       String   @map("first_name")
+  lastName        String   @map("last_name")
+  phone           String?
+  address         String?
+  status          String   @default("PENDING") // PENDING, PAID, PREPARING, SHIPPED, DELIVERED, CANCELLED, REFUNDED
+  subtotal        Float
+  shippingCost    Float      @map("shipping_cost")
+  discount        Float      @default(0)
+  total           Float
+  currency        String      @default("USD")
+  notes           String?
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  items     OrderItem[]
+  payments  Payment[]
+  shipments Shipment[]
+  events    OrderEvent[]
+
+  @@index([orderNumber])
+  @@index([status])
+  @@index([customerId])
+  @@index([createdAt])
+}
+
+model OrderEvent {
+  id        String   @id @default(cuid())
+  orderId   String   @map("order_id")
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    String
+  message   String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([orderId])
+}
+
+model OrderItem {
+  id         String   @id @default(cuid())
+  orderId    String   @map("order_id")
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId  String?  @map("product_id")
+  product    Product? @relation(fields: [productId], references: [id])
+  variantId  String?  @map("variant_id")
+  variant    ProductVariant? @relation(fields: [variantId], references: [id])
+  name       String
+  sku        String?
+  price      Float
+  quantity   Int
+  subtotal   Float
+
+  @@index([orderId])
+}
+
+// ============ PAYMENTS ============
+model Payment {
+  id            String   @id @default(cuid())
+  orderId      String   @map("order_id")
+  order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  amount       Float
+  currency     String   @default("USD")
+  status       String   @default("PENDING") // PENDING, SUCCESS, FAILED, REFUNDED
+  method        String        // mobile_money, carte, livraison
+  externalId    String?       @map("external_id")
+  rawResponse   String?       @map("raw_response") // JSON string
+  paidAt        DateTime?     @map("paid_at")
+  createdAt     DateTime      @default(now()) @map("created_at")
+
+  refunds Refund[]
+
+  @@index([orderId])
+  @@index([status])
+}
+
+model Refund {
+  id         String   @id @default(cuid())
+  paymentId  String   @map("payment_id")
+  payment    Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  amount     Float
+  reason     String?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([paymentId])
+}
+
+// ============ SHIPPING ============
+model Shipment {
+  id             String   @id @default(cuid())
+  orderId        String   @map("order_id")
+  order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  trackingNumber String?  @map("tracking_number") // trackingCode
+  status         String   // PENDING, PICKED, IN_TRANSIT, DELIVERED
+  address        String?
+  carrier        String?
+  shippedAt      DateTime? @map("shipped_at")
+  deliveredAt    DateTime? @map("delivered_at")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@index([orderId])
+}
+
+model ShippingZone {
+  id       String  @id @default(cuid())
+  name     String
+  code     String  @unique
+  price    Float
+  delay    String?
+  active   Boolean @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
+// ============ PROMOTIONS ============
+model Coupon {
+  id            String    @id @default(cuid())
+  code          String    @unique
+  type          String    // PERCENT, FIXED
+  value         Float
+  minOrderAmount Float?    @map("min_order_amount")
+  maxUses       Int?      @map("max_uses")
+  usedCount     Int       @default(0) @map("used_count")
+  startsAt      DateTime  @map("starts_at")
+  endsAt        DateTime  @map("ends_at")
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  @@index([code])
+  @@index([endsAt])
+}
+
+// ============ CMS ============
+model CmsPage {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String?
+  metaTitle   String?  @map("meta_title")
+  metaDesc    String?  @map("meta_desc")
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([slug])
+}
+
+model Banner {
+  id        String   @id @default(cuid())
+  title     String?
+  imageUrl  String   @map("image_url")
+  link      String?
+  position  String   // homepage_hero, homepage_secondary
+  active    Boolean  @default(true)
+  sortOrder Int      @default(0) @map("sort_order")
+  startsAt  DateTime? @map("starts_at")
+  endsAt    DateTime? @map("ends_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}

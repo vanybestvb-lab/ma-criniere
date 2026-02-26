@@ -2,32 +2,40 @@ import path from "path";
 import fs from "fs";
 import { PrismaClient } from "@prisma/client";
 
+/**
+ * Singleton Prisma pour Next.js / Vercel serverless.
+ * Évite "too many connections" et multiple instances du client entre rechargements (dev)
+ * et entre invocations (prod). Ne pas instancier PrismaClient ailleurs : importer prisma depuis ici.
+ */
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient | undefined };
 
 /**
- * Résout l'URL SQLite en chemin absolu pour éviter "Unable to open the database file"
- * quand le working directory varie (Next.js, CLI, etc.).
+ * Résout l'URL de base de données.
+ * - PostgreSQL (Neon, etc.) : on ajoute connect_timeout pour les cold starts (Vercel, serverless).
+ * - SQLite (dev) : chemin absolu depuis admin/prisma/.
  */
 function resolveDatabaseUrl(): string {
-  const url = process.env.DATABASE_URL;
-  if (!url || !url.startsWith("file:")) {
-    return url ?? "";
+  const url = (process.env.DATABASE_URL ?? "").trim();
+  if (!url) return "";
+
+  // PostgreSQL : ajouter un timeout de connexion pour éviter les échecs au cold start (Neon + Vercel)
+  if (url.startsWith("postgresql://") || url.startsWith("postgres://")) {
+    const separator = url.includes("?") ? "&" : "?";
+    const hasTimeout = /[?&]connect_timeout=/.test(url);
+    return hasTimeout ? url : `${url}${separator}connect_timeout=30`;
   }
-  const relativePath = url.replace(/^file:\.\/?/, "");
-  // Chemin absolu depuis la racine du projet admin (process.cwd() = admin/ en dev)
-  const absolutePath = path.resolve(process.cwd(), "prisma", relativePath);
-  const resolved = "file:" + absolutePath;
-  if (process.env.NODE_ENV === "development") {
-    const exists = fs.existsSync(absolutePath);
-    if (!exists) {
-      console.warn(
-        "[Prisma] Fichier DB introuvable:",
-        absolutePath,
-        "- Lancez dans admin/: npm run db:push && npm run db:seed"
-      );
+
+  // SQLite (dev local)
+  if (url.startsWith("file:")) {
+    const relativePath = url.replace(/^file:\.\/?/, "");
+    const absolutePath = path.resolve(process.cwd(), "prisma", relativePath);
+    if (process.env.NODE_ENV === "development" && !fs.existsSync(absolutePath)) {
+      console.warn("[Prisma] Fichier DB introuvable:", absolutePath);
     }
+    return "file:" + absolutePath;
   }
-  return resolved;
+
+  return url;
 }
 
 const datasourceUrl = resolveDatabaseUrl();
@@ -43,7 +51,7 @@ if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 }
 
-/** Vérifie si la base est accessible (pour afficher un message sur la page de login). */
+/** Vérifie si la base est accessible (SQLite et PostgreSQL). Utilisé sur la page de login. */
 export async function isDatabaseAvailable(): Promise<boolean> {
   try {
     await prisma.$queryRaw`SELECT 1`;

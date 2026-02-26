@@ -1,0 +1,3 @@
+# Provider pour les migrations (PostgreSQL). Utilisé par db:migrate (production).
+# Dev SQLite : ne pas utiliser migrate, utiliser db:push uniquement.
+provider = "postgresql"

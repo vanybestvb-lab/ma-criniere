@@ -1,13 +1,11 @@
 /**
  * Seed Ma Crinière — Données simulées pour le dashboard admin.
  * Idempotent : pas de doublons si exécuté plusieurs fois.
- * N'utilise que les modèles Prisma existants. Ne modifie pas le schéma.
+ * Compatible SQLite (dev) et PostgreSQL (prod). Utilise le singleton Prisma.
  */
 
-import { PrismaClient } from "@prisma/client";
 import * as bcrypt from "bcryptjs";
-
-const prisma = new PrismaClient();
+import { prisma } from "../src/lib/prisma";
 
 const SEED_ORDER_PREFIX = "MC-SEED-";
 
