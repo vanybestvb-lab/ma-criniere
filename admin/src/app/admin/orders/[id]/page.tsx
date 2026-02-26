@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { PrintButton } from "@/components/PrintButton";
 import { confirmOrderPayment } from "../actions";
@@ -8,9 +9,18 @@ export const dynamic = "force-dynamic";
 
 type Params = { params: Promise<{ id: string }> };
 
+type OrderWithDetails = Prisma.OrderGetPayload<{
+  include: {
+    items: { include: { product: true; variant: true } };
+    events: true;
+    payments: true;
+    shipments: true;
+  };
+}>;
+
 export default async function AdminOrderDetailPage({ params }: Params) {
   const { id } = await params;
-  let order: Awaited<ReturnType<typeof prisma.order.findUnique>> = null;
+  let order: OrderWithDetails | null = null;
   try {
     order = await prisma.order.findUnique({
       where: { id },
